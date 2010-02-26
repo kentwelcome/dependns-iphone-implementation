@@ -10,13 +10,14 @@
 		041B1DEF112E6BA8001640C6 /* MatchAlgo.m in Sources */ = {isa = PBXBuildFile; fileRef = 041B1DEE112E6BA8001640C6 /* MatchAlgo.m */; };
 		043889F7112D868D009AA632 /* ResolverDB.m in Sources */ = {isa = PBXBuildFile; fileRef = 043889F6112D868D009AA632 /* ResolverDB.m */; };
 		044234F01133AB250056D8BF /* WebView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 044234EF1133AB250056D8BF /* WebView.xib */; };
-		044236921133D12E0056D8BF /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 044236911133D12E0056D8BF /* icon.png */; };
 		044236AF1133E4E80056D8BF /* dns_init.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 044236AE1133E4E80056D8BF /* dns_init.sqlite */; };
 		044B8650112BC01700D1163E /* libresolv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 044B864F112BC01700D1163E /* libresolv.dylib */; };
 		045098EC11337B4D00AB5D4C /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 045098EB11337B4D00AB5D4C /* WebViewController.m */; };
 		047999E51134E4C40006699B /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 047999E41134E4C40006699B /* Reachability.m */; };
 		04799AAA1134E5B10006699B /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04799AA91134E5B10006699B /* SystemConfiguration.framework */; };
 		0490149D112BC4EA003FEB9A /* Dns_Util.m in Sources */ = {isa = PBXBuildFile; fileRef = 0490149C112BC4EA003FEB9A /* Dns_Util.m */; };
+		04A9621B11366903007F5BD3 /* Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = 04A9621A11366903007F5BD3 /* Utility.m */; };
+		04BAFF9711378D060094413B /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 04BAFF9611378D060094413B /* icon.png */; };
 		04C316A1112D9D140047D545 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 04C316A0112D9D140047D545 /* libsqlite3.dylib */; };
 		04EFBB261125460B0005996E /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04EFBB251125460B0005996E /* CFNetwork.framework */; };
 		1D3623260D0F684500981E51 /* DepenDNSAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* DepenDNSAppDelegate.m */; };
@@ -35,7 +36,6 @@
 		043889F5112D868D009AA632 /* ResolverDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ResolverDB.h; sourceTree = "<group>"; };
 		043889F6112D868D009AA632 /* ResolverDB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ResolverDB.m; sourceTree = "<group>"; };
 		044234EF1133AB250056D8BF /* WebView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WebView.xib; sourceTree = "<group>"; };
-		044236911133D12E0056D8BF /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		044236AE1133E4E80056D8BF /* dns_init.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = dns_init.sqlite; sourceTree = "<group>"; };
 		044B864F112BC01700D1163E /* libresolv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libresolv.dylib; path = usr/lib/libresolv.dylib; sourceTree = SDKROOT; };
 		045098EA11337B4D00AB5D4C /* WebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewController.h; sourceTree = "<group>"; };
@@ -45,6 +45,9 @@
 		04799AA91134E5B10006699B /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		0490149B112BC4EA003FEB9A /* Dns_Util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Dns_Util.h; sourceTree = "<group>"; };
 		0490149C112BC4EA003FEB9A /* Dns_Util.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Dns_Util.m; sourceTree = "<group>"; };
+		04A9621911366903007F5BD3 /* Utility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utility.h; sourceTree = "<group>"; };
+		04A9621A11366903007F5BD3 /* Utility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utility.m; sourceTree = "<group>"; };
+		04BAFF9611378D060094413B /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		04C316A0112D9D140047D545 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		04EFBB251125460B0005996E /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -97,6 +100,8 @@
 				043889F6112D868D009AA632 /* ResolverDB.m */,
 				041B1DED112E6BA8001640C6 /* MatchAlgo.h */,
 				041B1DEE112E6BA8001640C6 /* MatchAlgo.m */,
+				04A9621911366903007F5BD3 /* Utility.h */,
+				04A9621A11366903007F5BD3 /* Utility.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -133,8 +138,8 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				04BAFF9611378D060094413B /* icon.png */,
 				044236AE1133E4E80056D8BF /* dns_init.sqlite */,
-				044236911133D12E0056D8BF /* icon.png */,
 				044234EF1133AB250056D8BF /* WebView.xib */,
 				28F335F01007B36200424DE2 /* RootViewController.xib */,
 				28AD735F0D9D9599002E5188 /* MainWindow.xib */,
@@ -209,8 +214,8 @@
 				28AD73600D9D9599002E5188 /* MainWindow.xib in Resources */,
 				28F335F11007B36200424DE2 /* RootViewController.xib in Resources */,
 				044234F01133AB250056D8BF /* WebView.xib in Resources */,
-				044236921133D12E0056D8BF /* icon.png in Resources */,
 				044236AF1133E4E80056D8BF /* dns_init.sqlite in Resources */,
+				04BAFF9711378D060094413B /* icon.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -229,6 +234,7 @@
 				041B1DEF112E6BA8001640C6 /* MatchAlgo.m in Sources */,
 				045098EC11337B4D00AB5D4C /* WebViewController.m in Sources */,
 				047999E51134E4C40006699B /* Reachability.m in Sources */,
+				04A9621B11366903007F5BD3 /* Utility.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
