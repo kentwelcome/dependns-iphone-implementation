@@ -1,4 +1,4 @@
-#summary Screenshots of iPhone-XBMC-Controller
+#summary Screenshots of DepenDNS iPhone Implementation
 
 
 Here are some screenshots of the current version:
