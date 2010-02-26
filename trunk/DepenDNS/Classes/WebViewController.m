@@ -111,30 +111,22 @@
 		NSLog(@"Detect Shaking!");
 		
 		if(hasRunDepenDNS) {
-			NSString* msg = @""; 
-			
 			int res = [DepenDNSEngine checkTrustWorthy:self.connectedIP];
 			NSLog(@"res = %d.", res);
 			
 			if(res==0) {
 				NSLog(@"Safe!");
-				msg = @"Current is Safe!";
+				urlField.textColor = [UIColor blueColor];
 			}
 			if(res==1) {
 				NSLog(@"Might be suffer pharming!");
-				msg = @"Might be suffer pharming!";
+				urlField.textColor = [UIColor redColor];
 			}
 			if(res==-1) {
 				NSLog(@"DNS Query Failed! Press Detect Again!");
-				msg = @"DNS Query Failed! Press Detect Again!";
+				urlField.textColor = [UIColor orangeColor];
 			}
-			
-			UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message: msg 
-				delegate:webView cancelButtonTitle:@"OK" otherButtonTitles:nil];
-			[alert show];
-			[alert release];
 		}
-		
 	} 
 	beenhere = FALSE;
 }
@@ -149,8 +141,8 @@
 	hasRunDepenDNS = NO;
 	self.connectedIP = @"";
 	
+	urlField.textColor = [UIColor blackColor];
 	NSString *urlAddress = urlField.text;
-	//urlAddress = [urlAddress stringByAppendingString:urlField.text];
 	NSLog(@"goto URL:%@.", urlAddress);
 	//Create a URL object.
 	NSURL *url = [NSURL URLWithString:urlAddress];
@@ -162,7 +154,11 @@
 	// Run DepenDNS
 	int pos = [urlAddress rangeOfString: @"//"].location;
 	NSString* domain = [urlAddress substringFromIndex: pos+2];
-	NSLog(@"Domain: %@", domain);
+	pos = [domain rangeOfString: @"/"].location;
+	if(pos==NSNotFound)
+		NSLog(@"Domain: %@", domain);
+	else
+		NSLog(@"Domain: %@", [domain substringToIndex: pos]);
 	
 	// Get IP address of this Domain
 	const char* domaincString = [domain cStringUsingEncoding:NSASCIIStringEncoding];
@@ -171,7 +167,6 @@
 	char* ipaddr = inet_ntoa (*(struct in_addr *)*host_entry->h_addr_list);
 	self.connectedIP = [NSString stringWithCString:ipaddr length:strlen(ipaddr)];
 	NSLog(@"My IP is %@.", self.connectedIP);
-	
 	[DepenDNSEngine RunMatchAlgo: domain];
 	hasRunDepenDNS = YES;
 }
@@ -180,6 +175,9 @@
 {
 	// starting the load, show the activity indicator in the status bar
 	NSLog(@"webViewDidStartLoad");
+	// Change URL TextField Value
+	NSLog(@"Loading URL = %@.", [[[self.webView request] URL] absoluteString]);
+	// urlField.text = [[[self.webView request] URL] absoluteString];
 	[activityIndicator startAnimating];
 }
 
@@ -196,8 +194,8 @@
 	NSLog(@"didFailLoadWithError");
 	// report the error inside the webview
 	NSString* errorString = [NSString stringWithFormat:
-							 @"<html><center><font size=+5 color='red'>An error occurred:<br>%@</font></center></html>",
-							 error.localizedDescription];
+		@"<html><center><font size=+5 color='red'>An error occurred:<br>%@</font></center></html>",
+		error.localizedDescription];
 	[self.webView loadHTMLString:errorString baseURL:nil];
 }
 
@@ -209,7 +207,8 @@
 
 
 - (void)didReceiveMemoryWarning {
-	[super didReceiveMemoryWarning]; // Releases the view if it doesn't have a superview
+	[super didReceiveMemoryWarning]; 
+	// Releases the view if it doesn't have a superview
 	// Release anything that's not essential, such as cached data
 }
 
