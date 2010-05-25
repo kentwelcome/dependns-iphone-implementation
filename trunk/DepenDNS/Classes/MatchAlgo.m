@@ -11,6 +11,8 @@
 #import "ResolverDB.h"
 #include <arpa/inet.h>
 #include <stdlib.h>
+#include "ASIAuthenticationDialog.h"
+
 
 NSLock *lock;
 
@@ -37,16 +39,48 @@ NSLock *lock;
 - (int) RunMatchAlgo: (NSString*) domain
 {
 	// Clear Necessary Objects
-	[answers removeAllObjects];
+	/*[answers removeAllObjects];
 	[history_ip removeAllObjects];
-	[history_count removeAllObjects];
+	[history_count removeAllObjects];*/
 	[verifired_ip removeAllObjects];
 	
-	hasHistory = NO;
+	//hasHistory = NO;
 	hasComplete = NO;
 	// Start Query by DNS
-	[self MakeDnsQuery: domain];
+	//[self MakeDnsQuery: domain];
+	[self ask_php_server: domain];
 	return 0;
+}
+
+- (int) ask_php_server: (NSString*) domain
+{
+	NSString *tmp = [NSString stringWithFormat:@"http://is10.cs.nthu.edu.tw/~kent/test.php?question=%@",domain];
+	NSString *CanUseIP;
+	int index;
+	NSLog(@"%@\n",tmp);
+	NSURL *ask_url = [NSURL URLWithString: tmp];
+	ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:ask_url];
+	[request startSynchronous];
+	NSError *error = [request error];
+	if (!error) {
+		NSString *response = [request responseString];
+		NSLog(@"PHP Server: %@",response);
+		hasComplete = YES;
+		
+		while (index = [response rangeOfString: @"<br>"].location ) {
+			CanUseIP = [NSString stringWithFormat:@"%@",[ response substringToIndex: index ] ];
+			NSLog(@"%@.\n",CanUseIP);
+			if ( [CanUseIP rangeOfString: @"Greade:"].location != NSNotFound ){
+				break;
+			} else {
+				[verifired_ip addObject: CanUseIP];
+			}
+
+			response = [response substringFromIndex:index+5];
+		}
+		//int index = [response rangeOfString: @"<br>"].location;
+		
+	}
 }
 
 - (void)MakeDnsQuery: (NSString*) domain

@@ -10,6 +10,10 @@
 #import "RootViewController.h"
 #import "WebViewController.h"
 #import "Reachability.h"
+#include "ASIAuthenticationDialog.h"
+
+
+
 
 @implementation DepenDNSAppDelegate
 
@@ -43,9 +47,22 @@
 	[hostReach startNotifer];
 	
 	// [window addSubview:[navigationController view]];
+	//NSlog(@"test");
+	
+	//ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:url];
+	/*NSURL *url = [NSURL URLWithString:@"http://is10.cs.nthu.edu.tw/~kent/test.php?question=www.google.com"];
+	ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
+	[request startSynchronous];
+	NSError *error = [request error];
+	if (!error) {
+		NSString *response = [request responseString];
+		NSLog(@"%@",response);
+	}*/
+	
 	MyWebView = [[WebViewController alloc] initWithNibName:@"WebView" bundle:[NSBundle mainBundle]];
 	[window addSubview:[MyWebView view]];
     [window makeKeyAndVisible];
+	
 }
 
 //Called by Reachability whenever status changes.

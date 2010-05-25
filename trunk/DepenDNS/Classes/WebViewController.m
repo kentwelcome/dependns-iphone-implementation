@@ -12,6 +12,8 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include "ASIAuthenticationDialog.h"
+
 
 @implementation WebViewController
 
@@ -167,8 +169,21 @@
 	char* ipaddr = inet_ntoa (*(struct in_addr *)*host_entry->h_addr_list);
 	self.connectedIP = [NSString stringWithCString:ipaddr length:strlen(ipaddr)];
 	NSLog(@"My IP is %@.", self.connectedIP);
+	// change the method use php server to do match algorithm
 	[DepenDNSEngine RunMatchAlgo: domain];
+	
+	/*NSURL *ask_url = [NSURL URLWithString:@"http://is10.cs.nthu.edu.tw/~kent/test.php?question=www.google.com"];
+	ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:ask_url];
+	[request startSynchronous];
+	NSError *error = [request error];
+	if (!error) {
+		NSString *response = [request responseString];
+		NSLog(@"%@",response);
+		hasRunDepenDNS = YES;
+	}*/
 	hasRunDepenDNS = YES;
+	
+	
 }
 
 - (void)webViewDidStartLoad:(UIWebView *)webView
