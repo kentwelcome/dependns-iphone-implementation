@@ -65,7 +65,7 @@ UITextField *pass;
 	
 	// Set Functional Buttons
 	UIBarButtonItem *LoadButton = [[UIBarButtonItem alloc] 
-									 initWithTitle:@"Detect" style:UIBarButtonItemStyleBordered 
+									 initWithTitle:@"Go" style:UIBarButtonItemStyleBordered 
 									 target:self action:@selector(LoadURL:)];
 	
 	CGRect frame = CGRectMake(0, 0, 200, (toolbarHeight-20.0));
@@ -80,9 +80,9 @@ UITextField *pass;
 	urlField.text = @"http://";
 	[urlField setDelegate: self];
 	
-	/*UIBarButtonItem *LoginButton = [[UIBarButtonItem alloc] 
+	UIBarButtonItem *LoginButton = [[UIBarButtonItem alloc] 
 									initWithTitle:@"lonin" style:UIBarButtonItemStyleBordered 
-									target:self action:@selector(ShowLoginDialog:)];*/
+									target:self action:@selector(ShowLoginDialog)];
 	
 	
 	UIBarButtonItem *textFieldItem = [[UIBarButtonItem alloc] initWithCustomView:urlField];
@@ -97,7 +97,7 @@ UITextField *pass;
 	UIBarButtonItem *activityItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator]; 
 	
 	
-    NSArray *topBarItems = [NSArray arrayWithObjects: LoadButton, textFieldItem, activityItem, nil];	
+    NSArray *topBarItems = [NSArray arrayWithObjects: LoadButton, textFieldItem, LoginButton, activityItem, nil];	
     [self.toolBar setItems:topBarItems animated:NO];
 	
 	[ self ShowLoginDialog ];
