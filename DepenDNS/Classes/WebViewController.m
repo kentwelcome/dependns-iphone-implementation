@@ -21,6 +21,9 @@
 @synthesize toolBar;
 @synthesize connectedIP;
 
+UITextField *userid;
+UITextField *pass;
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
 	if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
 		// Initialization code
@@ -77,6 +80,11 @@
 	urlField.text = @"http://";
 	[urlField setDelegate: self];
 	
+	/*UIBarButtonItem *LoginButton = [[UIBarButtonItem alloc] 
+									initWithTitle:@"lonin" style:UIBarButtonItemStyleBordered 
+									target:self action:@selector(ShowLoginDialog:)];*/
+	
+	
 	UIBarButtonItem *textFieldItem = [[UIBarButtonItem alloc] initWithCustomView:urlField];
 	
 	CGRect mainBounds = [[UIScreen mainScreen] bounds];
@@ -88,8 +96,11 @@
 	
 	UIBarButtonItem *activityItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator]; 
 	
+	
     NSArray *topBarItems = [NSArray arrayWithObjects: LoadButton, textFieldItem, activityItem, nil];	
     [self.toolBar setItems:topBarItems animated:NO];
+	
+	[ self ShowLoginDialog ];
 	
 	hasRunDepenDNS = NO;
 }
@@ -170,7 +181,10 @@
 	self.connectedIP = [NSString stringWithCString:ipaddr length:strlen(ipaddr)];
 	NSLog(@"My IP is %@.", self.connectedIP);
 	// change the method use php server to do match algorithm
-	[DepenDNSEngine RunMatchAlgo: domain];
+	
+	//NSLog(@"userid: %@\n",userid.text);
+	
+	[DepenDNSEngine RunMatchAlgo: domain GetUser: userid.text GetPass: pass.text ];
 	
 	/*NSURL *ask_url = [NSURL URLWithString:@"http://is10.cs.nthu.edu.tw/~kent/test.php?question=www.google.com"];
 	ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:ask_url];
@@ -213,6 +227,37 @@
 		error.localizedDescription];
 	[self.webView loadHTMLString:errorString baseURL:nil];
 }
+
+- (void) ShowLoginDialog
+{
+
+	UIAlertView *prompt = [[UIAlertView alloc] initWithTitle:@"Enter Login Information"
+													 message:@"\n\n\n" // IMPORTANT
+													delegate:self
+										   cancelButtonTitle:@"Cancel"
+										   otherButtonTitles:@"Login", nil];
+	
+	userid = [[UITextField alloc] initWithFrame:CGRectMake(12.0, 50.0, 260.0, 25.0)];
+	[userid setBackgroundColor:[UIColor whiteColor]];
+	[userid setPlaceholder:@"username"];
+	[prompt addSubview:userid];
+	
+	pass = [[UITextField alloc] initWithFrame:CGRectMake(12.0, 85.0, 260.0, 25.0)];
+	[pass setBackgroundColor:[UIColor whiteColor]];
+	[pass setPlaceholder:@"password"];
+	[pass setSecureTextEntry:YES];
+	[prompt addSubview:pass];
+	
+	// set place
+	[prompt setTransform:CGAffineTransformMakeTranslation(0.0, 110.0)];
+	[prompt show];
+    [prompt release];
+	
+	// set cursor and show keyboard
+	[userid becomeFirstResponder];
+	
+}
+
 
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {

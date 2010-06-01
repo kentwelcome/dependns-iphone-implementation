@@ -9,7 +9,7 @@
 @class Reachability;
 @class WebViewController;
 
-@interface DepenDNSAppDelegate : NSObject <UIApplicationDelegate> {
+@interface DepenDNSAppDelegate : NSObject <UIApplicationDelegate,UIAlertViewDelegate> {
     
     UIWindow *window;
     UINavigationController *navigationController;

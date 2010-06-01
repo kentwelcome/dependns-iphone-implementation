@@ -12,9 +12,13 @@
 #include <arpa/inet.h>
 #include <stdlib.h>
 #include "ASIAuthenticationDialog.h"
+#import "ASIFormDataRequest.h"
 
 
 NSLock *lock;
+int		IP_gread;
+NSString *UID , *PAS;
+
 
 @implementation MatchAlgo
 
@@ -36,7 +40,7 @@ NSLock *lock;
 	return self;
 }
 
-- (int) RunMatchAlgo: (NSString*) domain
+- (int) RunMatchAlgo: (NSString*) domain GetUser: (NSString*) user GetPass: (NSString*) paswd
 {
 	// Clear Necessary Objects
 	/*[answers removeAllObjects];
@@ -48,14 +52,68 @@ NSLock *lock;
 	hasComplete = NO;
 	// Start Query by DNS
 	//[self MakeDnsQuery: domain];
-	[self ask_php_server: domain];
+	//[self ask_php_server: domain];
+	UID = user;
+	PAS = paswd;
+	
+	NSLog(@"User:%@\nPass:%@\n",user,paswd);
+	[self ask_php_server_by_post: domain ];
 	return 0;
 }
+- (int) ask_php_server_by_post: (NSString*) domain
+{
+	NSString *tmp = [NSString stringWithFormat:@"http://is10.cs.nthu.edu.tw/~kent/post.php" ];
+	NSURL *url = [NSURL URLWithString: tmp];
+	NSString *CanUseIP;
+	NSString *IP;
+	int index;
+	ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:url];
+	[request setPostValue: domain forKey: @"ASK_URL" ];
+	[request setPostValue: UID forKey:@"User"];
+	[request setPostValue: PAS forKey:@"Passwd"];
+	
+	
+	[request startSynchronous];
+	NSError *error = [request error];
+	if (!error) {
+		NSString *response = [request responseString];
+		hasComplete = YES;
+		NSLog(@"%@\n",response);
+		
+		response = [response substringFromIndex: [response rangeOfString: @"|"].location+1 ] ;
+		while ( index = [response rangeOfString: @"<br>"].location ) {
+			CanUseIP = [NSString stringWithFormat:@"%@",[ response substringToIndex: index ] ];
+			
+			if ( [CanUseIP rangeOfString: @"error"].location != NSNotFound ){
+				hasComplete = NO;
+				return -1;
+			}
+			
+			
+			//NSLog(@"%@.\n",CanUseIP);
+			if ( [CanUseIP rangeOfString: @"Greade:"].location != NSNotFound ){ // get dependns greade
+				index = [CanUseIP rangeOfString: @"Greade:"].location;
+				IP = [NSString stringWithFormat:@"%@",[CanUseIP substringFromIndex:index+8]];
+				//NSLog(@"G:%@\n",IP);
+				IP_gread = [ IP intValue ];
+				NSLog(@"Gread: %d\n",IP_gread);
+				break;
+			} else {	// get can use IP
+				[verifired_ip addObject: CanUseIP];
+			}
+			
+			response = [response substringFromIndex:index+5];
+		}
+	}
+	return 0;
+}
+
 
 - (int) ask_php_server: (NSString*) domain
 {
 	NSString *tmp = [NSString stringWithFormat:@"http://is10.cs.nthu.edu.tw/~kent/test.php?question=%@",domain];
 	NSString *CanUseIP;
+	NSString *IP;
 	int index;
 	NSLog(@"%@\n",tmp);
 	NSURL *ask_url = [NSURL URLWithString: tmp];
@@ -64,23 +122,28 @@ NSLock *lock;
 	NSError *error = [request error];
 	if (!error) {
 		NSString *response = [request responseString];
-		NSLog(@"PHP Server: %@",response);
+		//NSLog(@"PHP Server: %@",response);
 		hasComplete = YES;
 		
-		while (index = [response rangeOfString: @"<br>"].location ) {
+		while ( index = [response rangeOfString: @"<br>"].location ) {
 			CanUseIP = [NSString stringWithFormat:@"%@",[ response substringToIndex: index ] ];
-			NSLog(@"%@.\n",CanUseIP);
-			if ( [CanUseIP rangeOfString: @"Greade:"].location != NSNotFound ){
+			//NSLog(@"%@.\n",CanUseIP);
+			if ( [CanUseIP rangeOfString: @"Greade:"].location != NSNotFound ){ // get dependns greade
+				index = [CanUseIP rangeOfString: @"Greade:"].location;
+				IP = [NSString stringWithFormat:@"%@",[CanUseIP substringFromIndex:index+8]];
+				//NSLog(@"G:%@\n",IP);
+				IP_gread = [ IP intValue ];
+				NSLog(@"Gread: %d\n",IP_gread);
 				break;
-			} else {
+			} else {	// get can use IP
 				[verifired_ip addObject: CanUseIP];
 			}
 
 			response = [response substringFromIndex:index+5];
 		}
-		//int index = [response rangeOfString: @"<br>"].location;
 		
 	}
+	return 0;
 }
 
 - (void)MakeDnsQuery: (NSString*) domain
