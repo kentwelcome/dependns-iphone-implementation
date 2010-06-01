@@ -58,6 +58,8 @@
 		NSString *response = [request responseString];
 		NSLog(@"%@",response);
 	}*/
+	//ShowLoginDialog();
+	//[ self ShowLoginDialog ];
 	
 	MyWebView = [[WebViewController alloc] initWithNibName:@"WebView" bundle:[NSBundle mainBundle]];
 	[window addSubview:[MyWebView view]];
@@ -100,6 +102,38 @@
 	}
 	*/
 }
+
+- (void) ShowLoginDialog
+{
+	UITextField *userid;
+	UITextField *pass;
+	UIAlertView *prompt = [[UIAlertView alloc] initWithTitle:@"Enter Login Information"
+													 message:@"\n\n\n" // IMPORTANT
+													delegate:self
+										   cancelButtonTitle:@"Cancel"
+										   otherButtonTitles:@"Login", nil];
+	
+	userid = [[UITextField alloc] initWithFrame:CGRectMake(12.0, 50.0, 260.0, 25.0)];
+	[userid setBackgroundColor:[UIColor whiteColor]];
+	[userid setPlaceholder:@"username"];
+	[prompt addSubview:userid];
+	
+	pass = [[UITextField alloc] initWithFrame:CGRectMake(12.0, 85.0, 260.0, 25.0)];
+	[pass setBackgroundColor:[UIColor whiteColor]];
+	[pass setPlaceholder:@"password"];
+	[pass setSecureTextEntry:YES];
+	[prompt addSubview:pass];
+	
+	// set place
+	[prompt setTransform:CGAffineTransformMakeTranslation(0.0, 110.0)];
+	[prompt show];
+    [prompt release];
+	
+	// set cursor and show keyboard
+	[userid becomeFirstResponder];
+	
+}
+
 
 - (void)applicationWillTerminate:(UIApplication *)application {
 	// Save data if appropriate
