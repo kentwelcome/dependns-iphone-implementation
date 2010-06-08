@@ -80,7 +80,7 @@ NSString *UID , *PAS;
 		hasComplete = YES;
 		NSLog(@"%@\n",response);
 		
-		response = [response substringFromIndex: [response rangeOfString: @"|"].location+1 ] ;
+		response = [response substringFromIndex: [response rangeOfString: @"|"].location+2 ] ;
 		while ( index = [response rangeOfString: @"<br>"].location ) {
 			CanUseIP = [NSString stringWithFormat:@"%@",[ response substringToIndex: index ] ];
 			
@@ -99,6 +99,7 @@ NSString *UID , *PAS;
 				NSLog(@"Gread: %d\n",IP_gread);
 				break;
 			} else {	// get can use IP
+				NSLog(@"ver: %@\n",CanUseIP);
 				[verifired_ip addObject: CanUseIP];
 			}
 			
@@ -196,7 +197,7 @@ NSString *UID , *PAS;
 
 - (int) checkTrustWorthy: (NSString*) IP
 {
-	NSLog(@"Compared IP: %@", IP);
+	NSLog(@"Compared IP: %@ with %@\n", IP , verifired_ip);
 	
 	if(hasComplete){
 		if([verifired_ip containsObject:IP])
