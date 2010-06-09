@@ -29,6 +29,7 @@
 		28F335F11007B36200424DE2 /* RootViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28F335F01007B36200424DE2 /* RootViewController.xib */; };
 		2A63435211BF7496002F3A32 /* MyCLController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A63435111BF7496002F3A32 /* MyCLController.m */; };
 		2A63435F11BF752B002F3A32 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A63435E11BF752B002F3A32 /* CoreLocation.framework */; };
+		2A6343EF11BF91A8002F3A32 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A6343EE11BF91A8002F3A32 /* MapKit.framework */; };
 		2A6D246511ABBDBB0085AB1E /* ASIAuthenticationDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A6D245711ABBDBB0085AB1E /* ASIAuthenticationDialog.m */; };
 		2A6D246611ABBDBB0085AB1E /* ASIFormDataRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A6D245911ABBDBB0085AB1E /* ASIFormDataRequest.m */; };
 		2A6D246711ABBDBB0085AB1E /* ASIHTTPRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A6D245B11ABBDBB0085AB1E /* ASIHTTPRequest.m */; };
@@ -72,6 +73,7 @@
 		2A63435011BF7496002F3A32 /* MyCLController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyCLController.h; sourceTree = "<group>"; };
 		2A63435111BF7496002F3A32 /* MyCLController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyCLController.m; sourceTree = "<group>"; };
 		2A63435E11BF752B002F3A32 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		2A6343EE11BF91A8002F3A32 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		2A6D245611ABBDBB0085AB1E /* ASIAuthenticationDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIAuthenticationDialog.h; sourceTree = "<group>"; };
 		2A6D245711ABBDBB0085AB1E /* ASIAuthenticationDialog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASIAuthenticationDialog.m; sourceTree = "<group>"; };
 		2A6D245811ABBDBB0085AB1E /* ASIFormDataRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIFormDataRequest.h; sourceTree = "<group>"; };
@@ -107,6 +109,7 @@
 				2A6D247811ABBE670085AB1E /* MobileCoreServices.framework in Frameworks */,
 				2A6D247A11ABBE960085AB1E /* libz.1.2.3.dylib in Frameworks */,
 				2A63435F11BF752B002F3A32 /* CoreLocation.framework in Frameworks */,
+				2A6343EF11BF91A8002F3A32 /* MapKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -192,6 +195,7 @@
 				1D30AB110D05D00D00671497 /* Foundation.framework */,
 				2892E40F0DC94CBA00A64D0F /* CoreGraphics.framework */,
 				2A63435E11BF752B002F3A32 /* CoreLocation.framework */,
+				2A6343EE11BF91A8002F3A32 /* MapKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
