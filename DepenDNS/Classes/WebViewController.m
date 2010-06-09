@@ -20,6 +20,7 @@
 @synthesize webView;
 @synthesize toolBar;
 @synthesize connectedIP;
+@synthesize reverseGeocoder;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
 	if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
@@ -352,13 +353,76 @@
 
 - (void)locationUpdate:(CLLocation *)location {
     NSLog(@"%@", [location description]);
+	NSLog(@"Accuracy: %f.", [location verticalAccuracy]);
+	NSLog(@"Current latitude %f",location.coordinate.latitude);
+	NSLog(@"Current longitude %f",location.coordinate.longitude);
+	
+	self.reverseGeocoder =
+	[[[MKReverseGeocoder alloc] initWithCoordinate:location.coordinate] autorelease];
+    reverseGeocoder.delegate = self;
+    [reverseGeocoder start];
+	// NSLog(@"latitude: %@", location.coordinate.latitude);
+	// NSLog(@"longitude: %@", location.coordinate.longitude);
 }
 
 - (void)locationError:(NSError *)error {
     NSLog(@"%@", [error description]);
 }
 
+- (void)reverseGeocoder:(MKReverseGeocoder *)geocoder didFailWithError:(NSError *)error
+{
+    NSLog(@"MKReverseGeocoder has failed.");
+}
+
+- (void)reverseGeocoder:(MKReverseGeocoder *)geocoder didFindPlacemark:(MKPlacemark *)placemark
+{
+    //PlacemarkViewController *placemarkViewController =
+	//[[PlacemarkViewController alloc] initWithNibName:@"PlacemarkViewController" bundle:nil];
+    //placemarkViewController.placemark = placemark;
+    //[self presentModalViewController:placemarkViewController animated:YES];
+	NSString* local = @"";
+	NSLog(@"Thoroughfare: %@", placemark.thoroughfare);
+	if(placemark.thoroughfare != nil)
+		local = [local stringByAppendingString:placemark.thoroughfare];
+	NSLog(@"Sub-thoroughfare: %@", placemark.subThoroughfare);
+	if(placemark.subThoroughfare != nil)
+		local = [local stringByAppendingString:placemark.subThoroughfare];
+	NSLog(@"Locality: %@", placemark.locality);
+	if(placemark.locality != nil)
+		local = [local stringByAppendingString:placemark.locality];
+	NSLog(@"Sub-locality: %@", placemark.subLocality);
+	if(placemark.subLocality != nil)
+		local = [local stringByAppendingString:placemark.subLocality];
+	NSLog(@"Administrative Area: %@", placemark.administrativeArea);
+	if(placemark.administrativeArea != nil)
+		local = [local stringByAppendingString:placemark.administrativeArea];
+	NSLog(@"Sub-administrative Area: %@", placemark.subAdministrativeArea);
+	if(placemark.subAdministrativeArea != nil)
+		local = [local stringByAppendingString:placemark.subAdministrativeArea];
+	NSLog(@"Postal Code: %@", placemark.postalCode);
+	if(placemark.postalCode != nil)
+		local = [local stringByAppendingString:placemark.postalCode];
+	NSLog(@"Country: %@", placemark.country);
+	if(placemark.country != nil)
+		local = [local stringByAppendingString:placemark.country];
+	NSLog(@"Country Code: %@", placemark.countryCode);
+	if(placemark.countryCode != nil)
+		local = [local stringByAppendingString:placemark.countryCode];
+	
+	UIAlertView *infoAlert = [[UIAlertView alloc] initWithTitle:@"Location Information"
+													 message:local // IMPORTANT
+													delegate:nil
+										   cancelButtonTitle:nil
+										   otherButtonTitles:@"OK", nil];
+	// set place
+	[infoAlert setTransform:CGAffineTransformMakeTranslation(0.0, 110.0)];
+	[infoAlert show];
+    [infoAlert release];
+}
+
+
 - (void)dealloc {
+	[reverseGeocoder release];
 	[locationController release];	
 	[DepenDNSEngine release];
 	[activityIndicator release];

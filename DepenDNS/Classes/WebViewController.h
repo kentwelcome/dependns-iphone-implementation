@@ -7,11 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MapKit/MapKit.h>
 #import "MyCLController.h"
 
 @class MatchAlgo;
 
-@interface WebViewController : UIViewController <UITextFieldDelegate, UIAccelerometerDelegate, UIAlertViewDelegate, MyCLControllerDelegate>{
+@interface WebViewController : UIViewController <UITextFieldDelegate, UIAccelerometerDelegate,
+	UIAlertViewDelegate, MyCLControllerDelegate, MKReverseGeocoderDelegate>
+{
 	
 	IBOutlet UIWebView *webView;
 	UIToolbar	*toolBar;
@@ -24,11 +27,13 @@
 	BOOL hasRunDepenDNS;
 	NSString* connectedIP;
 	MyCLController *locationController;
+	MKReverseGeocoder *reverseGeocoder;
 }
 
 @property (nonatomic, retain) IBOutlet UIWebView *webView;
 @property (nonatomic, retain) UIToolbar* toolBar;
 @property (nonatomic, retain) NSString* connectedIP;
+@property (nonatomic, retain) MKReverseGeocoder *reverseGeocoder;
 
 - (void) accelerometer:(UIAccelerometer *)accelerometer didAccelerate:(UIAcceleration *)acceleration;
 - (void) ShowLoginDialog;
