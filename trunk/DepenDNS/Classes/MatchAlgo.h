@@ -33,5 +33,7 @@
 - (BOOL) BelongSameBClass: (NSString*) GivneIP;
 - (NSString*) getBClass: (NSString*) IP;
 - (int) checkTrustWorthy: (NSString*) IP;
+- (int) ask_php_server_by_post: (NSString*) domain;
+- (int) RunMatchAlgo: (NSString*) domain GetUser: (NSString*) user GetPass: (NSString*) paswd;
 
 @end
