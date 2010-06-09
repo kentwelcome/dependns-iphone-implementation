@@ -21,9 +21,6 @@
 @synthesize toolBar;
 @synthesize connectedIP;
 
-UITextField *userid;
-UITextField *pass;
-
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
 	if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
 		// Initialization code
@@ -64,9 +61,9 @@ UITextField *pass;
 	[self.view addSubview:self.toolBar];
 	
 	// Set Functional Buttons
-	UIBarButtonItem *LoadButton = [[UIBarButtonItem alloc] 
-									 initWithTitle:@"Go" style:UIBarButtonItemStyleBordered 
-									 target:self action:@selector(LoadURL:)];
+	//UIBarButtonItem *LoadButton = [[UIBarButtonItem alloc] 
+	//								 initWithTitle:@"Go" style:UIBarButtonItemStyleBordered 
+	//								 target:self action:@selector(LoadURL:)];
 	
 	CGRect frame = CGRectMake(0, 0, 200, (toolbarHeight-20.0));
     urlField = [[UITextField alloc] initWithFrame:frame];
@@ -81,7 +78,7 @@ UITextField *pass;
 	[urlField setDelegate: self];
 	
 	UIBarButtonItem *LoginButton = [[UIBarButtonItem alloc] 
-									initWithTitle:@"lonin" style:UIBarButtonItemStyleBordered 
+									initWithTitle:@"Login" style:UIBarButtonItemStyleBordered 
 									target:self action:@selector(ShowLoginDialog)];
 	
 	
@@ -97,13 +94,85 @@ UITextField *pass;
 	UIBarButtonItem *activityItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator]; 
 	
 	
-    NSArray *topBarItems = [NSArray arrayWithObjects: LoadButton, textFieldItem, LoginButton, activityItem, nil];	
-    [self.toolBar setItems:topBarItems animated:NO];
+    //NSArray *topBarItems = [NSArray arrayWithObjects: LoadButton, textFieldItem, LoginButton, activityItem, nil];	
+    NSArray *topBarItems = [NSArray arrayWithObjects: textFieldItem, LoginButton, activityItem, nil];	
+    
+	[self.toolBar setItems:topBarItems animated:NO];
 	
-	[ self ShowLoginDialog ];
+	// [self ShowLoginDialog];
+	// [self GetGeoLocation];
+	
+	// Get Geo Location Info	
+	locationController = [[MyCLController alloc] init];
+    locationController.delegate = self;
+    [locationController.locationManager startUpdatingLocation];
 	
 	hasRunDepenDNS = NO;
 }
+
+- (void) GetGeoLocation
+{
+	NSLog(@"Get GeoLocation.");
+	
+}
+
+- (void) textFieldDidBeginEditing:(UITextField*) textField
+{
+	NSLog(@"BeginEdit");
+	urlField.textColor = [UIColor blackColor];
+}
+
+- (void) textFieldDidEndEditing:(UITextField*) textField
+{
+	NSLog(@"EndEdit");
+	hasRunDepenDNS = NO;
+	self.connectedIP = @"";
+	NSString* domain;
+	urlField.textColor = [UIColor blackColor];
+	NSString *urlAddress = urlField.text;
+	NSLog(@"goto URL:%@.", urlAddress);
+	
+	// Run DepenDNS
+	int pos = [urlAddress rangeOfString: @"http://"].location;
+	if ( pos == NSNotFound ){
+		domain = urlAddress;
+		urlAddress = [NSString stringWithFormat: @"http://%@",urlAddress];
+	} else {
+		domain = [urlAddress substringFromIndex: pos+7]; 
+	}
+	
+	//Create a URL object.
+	NSURL *url = [NSURL URLWithString:urlAddress];
+	//URL Requst Object
+	NSURLRequest *requestObj = [NSURLRequest requestWithURL:url];
+	//Load the request in the UIWebView.
+	[webView loadRequest:requestObj];
+	NSLog(@"%@\n",urlAddress);
+	
+	
+	pos = [domain rangeOfString: @"/"].location;
+	if(pos==NSNotFound)
+		NSLog(@"Domain: %@", domain);
+	else
+		NSLog(@"Domain: %@", [domain substringToIndex: pos]);
+	
+	// Get IP address of this Domain
+	const char* domaincString = [domain cStringUsingEncoding:NSASCIIStringEncoding];
+	struct hostent *host_entry;
+	host_entry=gethostbyname(domaincString);
+	char* ipaddr = inet_ntoa (*(struct in_addr *)*host_entry->h_addr_list);
+	
+	self.connectedIP = [NSString initWithCString:ipaddr length:strlen(ipaddr)];
+	
+	NSLog(@"My IP is %@.", self.connectedIP);
+	// change the method use php server to do match algorithm
+	
+	[DepenDNSEngine RunMatchAlgo: domain GetUser: userid.text GetPass: pass.text ];
+	
+	hasRunDepenDNS = YES;
+	
+}
+
 
 - (void) accelerometer:(UIAccelerometer *)accelerometer didAccelerate:(UIAcceleration *)acceleration
 {
@@ -153,20 +222,29 @@ UITextField *pass;
 	
 	hasRunDepenDNS = NO;
 	self.connectedIP = @"";
-	
+	NSString* domain;
 	urlField.textColor = [UIColor blackColor];
 	NSString *urlAddress = urlField.text;
 	NSLog(@"goto URL:%@.", urlAddress);
+	
+	// Run DepenDNS
+	int pos = [urlAddress rangeOfString: @"http://"].location;
+	if ( pos == NSNotFound ){
+		domain = urlAddress;
+		urlAddress = [NSString stringWithFormat: @"http://%@",urlAddress];
+	} else {
+		domain = [urlAddress substringFromIndex: pos+7]; 
+	}
+
 	//Create a URL object.
 	NSURL *url = [NSURL URLWithString:urlAddress];
 	//URL Requst Object
 	NSURLRequest *requestObj = [NSURLRequest requestWithURL:url];
 	//Load the request in the UIWebView.
 	[webView loadRequest:requestObj];
+	NSLog(@"%@\n",urlAddress);
 	
-	// Run DepenDNS
-	int pos = [urlAddress rangeOfString: @"//"].location;
-	NSString* domain = [urlAddress substringFromIndex: pos+2];
+	
 	pos = [domain rangeOfString: @"/"].location;
 	if(pos==NSNotFound)
 		NSLog(@"Domain: %@", domain);
@@ -178,7 +256,7 @@ UITextField *pass;
 	struct hostent *host_entry;
 	host_entry=gethostbyname(domaincString);
 	char* ipaddr = inet_ntoa (*(struct in_addr *)*host_entry->h_addr_list);
-	self.connectedIP = [NSString stringWithCString:ipaddr length:strlen(ipaddr)];
+	self.connectedIP = [NSString initWithCString:ipaddr length:strlen(ipaddr)];
 	NSLog(@"My IP is %@.", self.connectedIP);
 	// change the method use php server to do match algorithm
 	
@@ -272,8 +350,16 @@ UITextField *pass;
 	// Release anything that's not essential, such as cached data
 }
 
+- (void)locationUpdate:(CLLocation *)location {
+    NSLog(@"%@", [location description]);
+}
+
+- (void)locationError:(NSError *)error {
+    NSLog(@"%@", [error description]);
+}
 
 - (void)dealloc {
+	[locationController release];	
 	[DepenDNSEngine release];
 	[activityIndicator release];
 	[urlField release];

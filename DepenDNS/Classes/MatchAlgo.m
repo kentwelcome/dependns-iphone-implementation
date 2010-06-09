@@ -60,6 +60,8 @@ NSString *UID , *PAS;
 	[self ask_php_server_by_post: domain ];
 	return 0;
 }
+
+
 - (int) ask_php_server_by_post: (NSString*) domain
 {
 	NSString *tmp = [NSString stringWithFormat:@"http://is10.cs.nthu.edu.tw/~kent/post.php" ];
