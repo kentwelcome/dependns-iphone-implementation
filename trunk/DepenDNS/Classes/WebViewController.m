@@ -100,13 +100,13 @@
     
 	[self.toolBar setItems:topBarItems animated:NO];
 	
-	// [self ShowLoginDialog];
+	[self ShowLoginDialog];
 	// [self GetGeoLocation];
 	
 	// Get Geo Location Info	
-	locationController = [[MyCLController alloc] init];
-    locationController.delegate = self;
-    [locationController.locationManager startUpdatingLocation];
+	//locationController = [[MyCLController alloc] init];
+    //locationController.delegate = self;
+    //[locationController.locationManager startUpdatingLocation];
 	
 	hasRunDepenDNS = NO;
 }
@@ -320,21 +320,31 @@
 													 message:@"\n\n\n" // IMPORTANT
 													delegate:self
 										   cancelButtonTitle:@"Cancel"
-										   otherButtonTitles:@"Login", nil];
+										   otherButtonTitles:@"Login",@"Regist", nil];
+	
 	
 	userid = [[UITextField alloc] initWithFrame:CGRectMake(12.0, 50.0, 260.0, 25.0)];
 	[userid setBackgroundColor:[UIColor whiteColor]];
 	[userid setPlaceholder:@"username"];
+	userid.clearButtonMode = UITextFieldViewModeWhileEditing;
+	userid.keyboardType = UIKeyboardTypeDefault;
+	userid.keyboardAppearance = UIKeyboardAppearanceAlert;
+	userid.autocorrectionType = UITextAutocorrectionTypeNo;
+	userid.secureTextEntry = NO;
 	[prompt addSubview:userid];
 	
 	pass = [[UITextField alloc] initWithFrame:CGRectMake(12.0, 85.0, 260.0, 25.0)];
 	[pass setBackgroundColor:[UIColor whiteColor]];
 	[pass setPlaceholder:@"password"];
 	[pass setSecureTextEntry:YES];
+	pass.clearButtonMode = UITextFieldViewModeWhileEditing;
+	pass.keyboardType = UIKeyboardTypeDefault;
+	pass.keyboardAppearance = UIKeyboardAppearanceAlert;
+	pass.autocorrectionType = UITextAutocorrectionTypeNo;
 	[prompt addSubview:pass];
 	
 	// set place
-	[prompt setTransform:CGAffineTransformMakeTranslation(0.0, 110.0)];
+	[prompt setTransform:CGAffineTransformMakeTranslation(0.0, 100.0)];
 	[prompt show];
     [prompt release];
 	
@@ -343,6 +353,18 @@
 	
 }
 
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)index
+{
+	if (index == 0)	// button cancel
+	{
+		//NSLog(@"button 1\n");
+	} else if (index == 1) { // button Login
+		//NSLog(@"button2\n");
+	} else if (index == 2) { // button Regist
+		[[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://is10.cs.nthu.edu.tw/~kent/check.php"]];
+	}
+	// ... repeat for each button that you need to do something with
+}
 
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
