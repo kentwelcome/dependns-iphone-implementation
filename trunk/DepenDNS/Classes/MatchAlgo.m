@@ -69,6 +69,7 @@ NSString *UID , *PAS;
 	NSString *CanUseIP;
 	NSString *IP;
 	int index;
+	NSLog(@"%@",tmp);
 	ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:url];
 	[request setPostValue: domain forKey: @"ASK_URL" ];
 	[request setPostValue: UID forKey:@"User"];
