@@ -158,12 +158,18 @@
 		NSLog(@"Domain: %@", [domain substringToIndex: pos]);
 	
 	// Get IP address of this Domain
+	//const char* domaincString = [domain cStringUsingEncoding:NSASCIIStringEncoding];
+	//struct hostent *host_entry;
+	//host_entry=gethostbyname(domaincString);
+	//char* ipaddr = inet_ntoa (*(struct in_addr *)*host_entry->h_addr_list);
+	
+	
 	const char* domaincString = [domain cStringUsingEncoding:NSASCIIStringEncoding];
 	struct hostent *host_entry;
 	host_entry=gethostbyname(domaincString);
 	char* ipaddr = inet_ntoa (*(struct in_addr *)*host_entry->h_addr_list);
-	
-	self.connectedIP = [NSString initWithCString:ipaddr length:strlen(ipaddr)];
+	self.connectedIP = [NSString stringWithFormat:@"%s",ipaddr ];
+	//self.connectedIP = [NSString initWithCString:ipaddr length:strlen(ipaddr)];
 	
 	NSLog(@"My IP is %@.", self.connectedIP);
 	// change the method use php server to do match algorithm
