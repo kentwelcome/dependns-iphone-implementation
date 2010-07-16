@@ -379,6 +379,7 @@
 	// Release anything that's not essential, such as cached data
 }
 
+#ifdef LOCATE_INFO
 - (void)locationUpdate:(CLLocation *)location {
     NSLog(@"%@", [location description]);
 	NSLog(@"Accuracy: %f.", [location verticalAccuracy]);
@@ -447,11 +448,11 @@
 	[infoAlert show];
     [infoAlert release];
 }
-
+#endif
 
 - (void)dealloc {
 	[reverseGeocoder release];
-	[locationController release];	
+	//[locationController release];		// remove location function 
 	[DepenDNSEngine release];
 	[activityIndicator release];
 	[urlField release];
