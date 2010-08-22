@@ -1,0 +1,26 @@
+<html>
+<body>
+<p><b> Javascript display</b>
+<p><div id="display">&nbsp;</div>
+</body>
+
+<script>
+
+var index = 0;
+
+function display( text ){
+	var id = 'phrase' + index++;
+	var status = document.getElementById('display');
+	status.innerHTML += '<span id="'+ id + '"></span><br>';
+	var bullet = '(' + ( index ) + ') ';
+	document.getElementById(id).innerText = bullet +' ' + text ;
+
+}
+
+
+var database = window.openDatabase("Database Name", "Database Version");
+DB.transaction( function(tx){});
+
+
+</script>
+</html>
