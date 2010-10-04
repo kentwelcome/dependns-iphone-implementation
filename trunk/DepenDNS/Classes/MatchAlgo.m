@@ -64,7 +64,7 @@ NSString *UID , *PAS;
 
 - (int) ask_php_server_by_post: (NSString*) domain
 {
-	NSString *tmp = [NSString stringWithFormat:@"http://is10.cs.nthu.edu.tw/~kent/post.php" ];
+	NSString *tmp = [NSString stringWithFormat:@"http://moon.cs.nthu.edu.tw/~kent/DepenDNS/post.php" ];
 	NSURL *url = [NSURL URLWithString: tmp];
 	NSString *CanUseIP;
 	NSString *IP;
@@ -115,7 +115,7 @@ NSString *UID , *PAS;
 
 - (int) ask_php_server: (NSString*) domain
 {
-	NSString *tmp = [NSString stringWithFormat:@"http://is10.cs.nthu.edu.tw/~kent/test.php?question=%@",domain];
+	NSString *tmp = [NSString stringWithFormat:@"http://moon.cs.nthu.edu.tw/~kent/DepenDNS/test.php?question=%@",domain];
 	NSString *CanUseIP;
 	NSString *IP;
 	int index;
