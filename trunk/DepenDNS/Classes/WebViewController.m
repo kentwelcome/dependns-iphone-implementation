@@ -317,7 +317,7 @@
 {
 
 	UIAlertView *prompt = [[UIAlertView alloc] initWithTitle:@"Enter Login Information"
-													 message:@"\n\n\n" // IMPORTANT
+													 message:@"\n\n" // IMPORTANT
 													delegate:self
 										   cancelButtonTitle:@"Cancel"
 										   otherButtonTitles:@"Login",@"Regist", nil];
@@ -344,7 +344,7 @@
 	[prompt addSubview:pass];
 	
 	// set place
-	[prompt setTransform:CGAffineTransformMakeTranslation(0.0, 100.0)];
+	[prompt setTransform:CGAffineTransformMakeTranslation(0.0, 120.0)];
 	[prompt show];
     [prompt release];
 	
