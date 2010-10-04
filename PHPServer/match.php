@@ -170,7 +170,6 @@ Class Match {
 		for( $i = 0 ; $i < count($this->AnswerList) ; $i++ )
 		{
 			$Ans = $this->AnswerList[$i];
-			//display(Ans);
 			$Ans->setClassCountPercent($resolverCount);
 		}
 

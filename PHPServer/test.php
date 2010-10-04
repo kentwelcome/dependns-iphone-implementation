@@ -1,4 +1,4 @@
-<?php
+<?
 
 require("dns.inc.php");
 require("dnslookup.php");
@@ -9,18 +9,22 @@ require("match.php");
 require("IPChoose.php");
 
 
+$AskUrl	= $_REQUEST["ASK_URL"];
+$User 	= "kent";
+$Passwd = "123";
+
+// id check
+$MD5_hash = md5($Passwd);
+
 // set domain name 
-if (isset($_REQUEST['question'])) 
-	$question=$_REQUEST['question'];
-else{
-	echo "no url<br>";
+if ( $AskUrl != "" ){ 
+	$question=$AskUrl;
+}else{
+	echo "no url<br>\n";
 	exit(0);
 }
-if (isset($_REQUEST['connectIP'])) 
-        $connectIP=$_REQUEST['connectIP'];
 
 // set resolver list
-
 $resolverList[] = "168.95.1.1";
 $resolverList[] = "168.95.192.1";
 $resolverList[] = "139.175.55.244";
@@ -42,17 +46,12 @@ $resolverList[] = "203.79.224.30";
 // set History List
 $HistoryList = array();
 
-//echo "test: ".$question."<br>";
-
-//for ( $i = 0 ;$i < count($resolverList) ; $i++ ){
-//	echo $resolverList[$i]."<br>";
-//}
 
 // send dns query
-$port=53;
+$port	=53;
 $timeout=60;
-$udp=true;
-$type="A";
+$udp	=true;
+$type	="A";
 
 for ( $i = 0 ;$i < count($resolverList) ; $i++ ){
 	$query_ans[$i] = new DNSQuery($resolverList[$i],
@@ -69,7 +68,6 @@ for ( $i = 0 ;$i < count($resolverList) ; $i++ ){
 		$counter = 0;
 		for ( $j = 0 ; $j < $resultList[$i]->count ; $j++ ){
 			if ( $resultList[$i]->results[$j]->type == 1 ){
-				//echo "DNS".$i.": ".$resultList[$i]->results[$j]->data."<br>";
 				$counter++;
 			}
 		}
@@ -81,6 +79,20 @@ for ( $i = 0 ;$i < count($resolverList) ; $i++ ){
 // db link
 $link = mysql_connect("localhost", "dependns", "dependns@833");
 if ( mysql_select_db("dependns", $link) ){
+	// check user passwd 
+	$sql_query = "select UserInfo.passwd from UserInfo where username = '".$User."';";
+	$result = mysql_query($sql_query);
+	if ( $result ){
+		$row = mysql_fetch_row($result);
+		echo $row[0]."\n";	
+		if ( $row[0] != $MD5_hash ){
+			mysql_close();
+			echo "error login\n| error <br>";
+			exit(0);
+		}
+	}
+	
+
 	// check table domain_id 
 	$sql_query = "SELECT id FROM domain_id WHERE domain_name = '".$question."';";
 	$result = mysql_query($sql_query);
@@ -91,7 +103,7 @@ if ( mysql_select_db("dependns", $link) ){
 		if ( $row[0] == null ){
 			//echo "empty<br>";
 			$sql_query = "INSERT INTO domain_id (id,domain_name) VALUES( NULL , '".$question."');";
-			
+
 			mysql_query($sql_query);
 
 			$sql_query = "SELECT id FROM domain_id WHERE domain_name = '".$question."';";     
@@ -105,8 +117,8 @@ if ( mysql_select_db("dependns", $link) ){
 			$id = $row[0];
 			for ( $i = 0 ;$i < count($resolverList) ; $i++ ){
 				for ( $j = 0 ; 
-				      $j < $resultList[$i]->count ; 
-				      $j++ ) {
+						$j < $resultList[$i]->count ; 
+						$j++ ) {
 
 					if ( $resultList[$i]->results[$j]->type == 1 ){                              
 						$sql_query = "INSERT INTO domain_"
@@ -150,14 +162,8 @@ if ( mysql_select_db("dependns", $link) ){
 
 mysql_close();
 
-for ( $i = 0 ; $i < count($HistoryList) ; $i++ ){
-	//for ( $j = 0 ; $j < count($HistoryList[$i]->ipList) ; $j++ ){
-	//echo $HistoryList[$i]->ipList[$j]->ip." times: ".$HistoryList[$i]->ipList[$j]->count."<br>";
-	//}
-	//echo $HistoryList[$i]->getBClass()." times: ".$HistoryList[$i]->classCount."<br>";
-}
-
 // do dependns algorithm
+echo "|\n";
 $dolookup = new DNSLookup(); 
 $dolookup->run_algo( $resultList , $HistoryList , $oneTimeCount );
 
