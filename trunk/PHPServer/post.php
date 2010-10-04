@@ -9,27 +9,12 @@ require("match.php");
 require("IPChoose.php");
 
 
-$AskUrl = $_POST["ASK_URL"];
-$User = $_POST["User"];
+$AskUrl	= $_POST["ASK_URL"];
+$User 	= $_POST["User"];
 $Passwd = $_POST["Passwd"];
 
 // id check
- 
 $MD5_hash = md5($Passwd);
-
-//$login = mysql_connect("localhost", "dependns", "dependns@833");
-//if ( mysql_select_db("dependns", $login) ){
-//	$sql_query = "select UserInfo.passwd from UserInfo where username = '".$User."';";
-//	$R = mysql_query($sql_query);
-//	$row = mysql_fetch_row($R);
-//	if ( $row[0] != $MD5_hash ){
-		//echo "login error\n";
-//		mysql_close();
-//		exit(0);
-//	}
-//}
-//mysql_close();
-
 
 // set domain name 
 if ( $AskUrl != "" ){ 
@@ -63,10 +48,10 @@ $HistoryList = array();
 
 
 // send dns query
-$port=53;
+$port	=53;
 $timeout=60;
-$udp=true;
-$type="A";
+$udp	=true;
+$type	="A";
 
 for ( $i = 0 ;$i < count($resolverList) ; $i++ ){
 	$query_ans[$i] = new DNSQuery($resolverList[$i],

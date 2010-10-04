@@ -18,11 +18,15 @@ class DNSLookup {
 	function run_algo( $ResolveAns , $HistoryList , $oneTimeCount ){
 			
 		// set resolver count
-		$this->resolverCount = 17;
-
+		$this->resolverCount = 0;
+		for ( $i = 0 ; $i < count($ResolveAns) ; $i++ ){
+			if ( $ResolveAns[$i]->count > 0 )
+				$this->resolverCount++;
+		}
 
 		for ( $i = 0 ; $i < count($ResolveAns) ; $i++ ){
 			//echo $ResolveAns[$i];
+			//echo $ResolveAns[$i]->count."<br>";
 			for ( $j = 0 ; $j < $ResolveAns[$i]->count ; $j++ ){
 				if ( $ResolveAns[$i]->results[$j]->type == 1 ){
 					$ip = $ResolveAns[$i]->results[$j]->data;
