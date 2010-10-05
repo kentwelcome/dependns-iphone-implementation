@@ -60,7 +60,7 @@ if (!$resp->is_valid ) {
 	if ( $passwd == $again ){
 		$link = mysql_connect("localhost", "dependns", "dependns@833");
 		if ( mysql_select_db("dependns", $link) ){
-			$mysql_query = "select UserInfo from UserInfo where UserInfo.username ='".$userid."';";
+			$sql_query = "select UserInfo from UserInfo where UserInfo.username ='".$userid."';";
 			$result = mysql_query($sql_query);
 
 			// no such ID
