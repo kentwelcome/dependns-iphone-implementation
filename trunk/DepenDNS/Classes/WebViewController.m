@@ -309,15 +309,15 @@
 {
 
 	UIAlertView *prompt = [[UIAlertView alloc] initWithTitle:@"Enter Login Information"
-													 message:@"\n\n" // IMPORTANT
+													 message:@"\n\n\n\n" // IMPORTANT
 													delegate:self
-										   cancelButtonTitle:@"Cancel"
-										   otherButtonTitles:@"Login",@"Regist", nil];
+										   cancelButtonTitle:@"Login"
+										   otherButtonTitles:@"Register", nil];
 	
 	
 	userid = [[UITextField alloc] initWithFrame:CGRectMake(12.0, 50.0, 260.0, 25.0)];
 	[userid setBackgroundColor:[UIColor whiteColor]];
-	[userid setPlaceholder:@"username"];
+	[userid setPlaceholder:@"User Name"];
 	userid.clearButtonMode = UITextFieldViewModeWhileEditing;
 	userid.keyboardType = UIKeyboardTypeDefault;
 	userid.keyboardAppearance = UIKeyboardAppearanceAlert;
@@ -327,7 +327,7 @@
 	
 	pass = [[UITextField alloc] initWithFrame:CGRectMake(12.0, 85.0, 260.0, 25.0)];
 	[pass setBackgroundColor:[UIColor whiteColor]];
-	[pass setPlaceholder:@"password"];
+	[pass setPlaceholder:@"Password"];
 	[pass setSecureTextEntry:YES];
 	pass.clearButtonMode = UITextFieldViewModeWhileEditing;
 	pass.keyboardType = UIKeyboardTypeDefault;
@@ -336,7 +336,7 @@
 	[prompt addSubview:pass];
 	
 	// set place
-	[prompt setTransform:CGAffineTransformMakeTranslation(0.0, 120.0)];
+	[prompt setTransform:CGAffineTransformMakeTranslation(0.0, 0.0)];
 	[prompt show];
     [prompt release];
 	
@@ -347,13 +347,12 @@
 
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)index
 {
-	if (index == 0)	// button cancel
+	if (index == 0)	// button Login
 	{
 		//NSLog(@"button 1\n");
-	} else if (index == 1) { // button Login
+	} else if (index == 1) { // button Register
+		[[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://moon.cs.nthu.edu.tw/~kent/mobile.html"]];
 		//NSLog(@"button2\n");
-	} else if (index == 2) { // button Regist
-		[[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://is10.cs.nthu.edu.tw/~kent/check.php"]];
 	}
 	// ... repeat for each button that you need to do something with
 }

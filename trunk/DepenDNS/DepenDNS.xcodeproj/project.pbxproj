@@ -19,7 +19,6 @@
 		04BAFF9711378D060094413B /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 04BAFF9611378D060094413B /* icon.png */; };
 		04C316A1112D9D140047D545 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 04C316A0112D9D140047D545 /* libsqlite3.dylib */; };
 		04EFBB261125460B0005996E /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04EFBB251125460B0005996E /* CFNetwork.framework */; };
-		130721F9125B956E001B98E9 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 130721F8125B956E001B98E9 /* Default.png */; };
 		1D3623260D0F684500981E51 /* DepenDNSAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* DepenDNSAppDelegate.m */; };
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
@@ -59,7 +58,6 @@
 		04BAFF9611378D060094413B /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		04C316A0112D9D140047D545 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		04EFBB251125460B0005996E /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
-		130721F8125B956E001B98E9 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D3623240D0F684500981E51 /* DepenDNSAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DepenDNSAppDelegate.h; sourceTree = "<group>"; };
 		1D3623250D0F684500981E51 /* DepenDNSAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DepenDNSAppDelegate.m; sourceTree = "<group>"; };
@@ -182,7 +180,6 @@
 				28F335F01007B36200424DE2 /* RootViewController.xib */,
 				28AD735F0D9D9599002E5188 /* MainWindow.xib */,
 				8D1107310486CEB800E47090 /* DepenDNS-Info.plist */,
-				130721F8125B956E001B98E9 /* Default.png */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -279,7 +276,6 @@
 				044234F01133AB250056D8BF /* WebView.xib in Resources */,
 				044236AF1133E4E80056D8BF /* dns_init.sqlite in Resources */,
 				04BAFF9711378D060094413B /* icon.png in Resources */,
-				130721F9125B956E001B98E9 /* Default.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -357,7 +353,7 @@
 				PREBINDING = NO;
 				PROVISIONING_PROFILE = "8F7932A5-76A2-4447-BACC-6683E5F200B3";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "8F7932A5-76A2-4447-BACC-6683E5F200B3";
-				SDKROOT = iphonesimulator3.2;
+				SDKROOT = iphonesimulator4.0;
 			};
 			name = Debug;
 		};
