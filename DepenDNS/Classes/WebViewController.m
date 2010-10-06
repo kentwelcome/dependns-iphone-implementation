@@ -99,15 +99,7 @@
     NSArray *topBarItems = [NSArray arrayWithObjects: textFieldItem, LoginButton, activityItem, nil];	
     
 	[self.toolBar setItems:topBarItems animated:NO];
-	
 	[self ShowLoginDialog];
-	// [self GetGeoLocation];
-	
-	// Get Geo Location Info	
-	//locationController = [[MyCLController alloc] init];
-    //locationController.delegate = self;
-    //[locationController.locationManager startUpdatingLocation];
-	
 	hasRunDepenDNS = NO;
 }
 
