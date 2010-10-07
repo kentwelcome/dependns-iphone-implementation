@@ -18,7 +18,7 @@ function a(){
 </div>
 <div id="content">
 	<div id="register">
-		<form name="login" method="post" action="register.php">
+		<form name="login" method="post" action="index.php">
 			<h1>Register for User ID</h1>
 			<table width="20%" border="0" cellpadding="3" cellspacing="1" bgcolor="#FFFFFF" align:"center" style="margin-left:auto; margin-right:auto;">
 				<tr>
@@ -101,7 +101,6 @@ if ( !$resp->is_valid ) {
 </div>
 
 <div id="footer">
-	<a href="http://www.twisc.nctu.edu.tw/"><img  src="images/twiscnctu.png" height="100" border="0" align="right"></a>
 </div>
 
 </body>
