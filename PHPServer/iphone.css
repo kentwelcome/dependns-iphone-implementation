@@ -2,7 +2,7 @@
 	text-shadow: 2px 2px 4px #333;
 }
 .mainContent {
-	height: 320px;
+	/*height: 240px;*/
 	text-align: center;
 	background-color: #ffffff;
 	background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, #778fbd),color-stop(1, #ffffff)); /* Saf4+, Chrome */
@@ -13,6 +13,8 @@
 	-moz-border-radius: 5px;  
 	background: #ddd;  
 	border: 1px solid #aaa;  
+	width: 240px;
+	margin:0 auto;
 }
 
 
@@ -124,7 +126,7 @@
 }
 
 p { color: #666;
-	font-size: 16px;
+	font-size: 20px;
 	font-family: "Lucida Grande", Arial, sans-serif;
 	font-weight: normal;
 	margin-top: 0;
