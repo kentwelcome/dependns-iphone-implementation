@@ -7,6 +7,9 @@
 <script>
 function a(){
 }
+
+var isPhone = navigator.userAgent;
+alert(isPhone);
 </script>
 </head>
 <body>
