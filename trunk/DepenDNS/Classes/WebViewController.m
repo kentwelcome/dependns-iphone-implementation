@@ -144,10 +144,11 @@
 	
 	
 	pos = [domain rangeOfString: @"/"].location;
-	if(pos==NSNotFound)
-		NSLog(@"Domain: %@", domain);
-	else
-		NSLog(@"Domain: %@", [domain substringToIndex: pos]);
+	if(pos==NSNotFound){
+		NSLog(@"Domain: %@\n", domain);
+	} else {
+		NSLog(@"Domain: %@\n", [domain substringToIndex: pos]);
+	}
 	
 	// Get IP address of this Domain
 	//const char* domaincString = [domain cStringUsingEncoding:NSASCIIStringEncoding];
@@ -155,10 +156,14 @@
 	//host_entry=gethostbyname(domaincString);
 	//char* ipaddr = inet_ntoa (*(struct in_addr *)*host_entry->h_addr_list);
 	
+
 	
 	const char* domaincString = [domain cStringUsingEncoding:NSASCIIStringEncoding];
 	struct hostent *host_entry;
 	host_entry=gethostbyname(domaincString);
+	if ( host_entry == NULL ) {
+		return;
+	}
 	char* ipaddr = inet_ntoa (*(struct in_addr *)*host_entry->h_addr_list);
 	self.connectedIP = [NSString stringWithFormat:@"%s",ipaddr ];
 	//self.connectedIP = [NSString initWithCString:ipaddr length:strlen(ipaddr)];
@@ -311,8 +316,8 @@
 	UIAlertView *prompt = [[UIAlertView alloc] initWithTitle:@"Enter Login Information"
 													 message:@"\n\n\n\n" // IMPORTANT
 													delegate:self
-										   cancelButtonTitle:@"Login"
-										   otherButtonTitles:@"Register", nil];
+										   cancelButtonTitle:@"Register"
+										   otherButtonTitles:@"Login", nil];
 	
 	
 	userid = [[UITextField alloc] initWithFrame:CGRectMake(12.0, 50.0, 260.0, 25.0)];
@@ -347,11 +352,11 @@
 
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)index
 {
-	if (index == 0)	// button Login
+	if (index == 1)	// button Login
 	{
 		//NSLog(@"button 1\n");
-	} else if (index == 1) { // button Register
-		[[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://moon.cs.nthu.edu.tw/~kent/mobile.html"]];
+	} else if (index == 0) { // button Register
+		[[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://moon.cs.nthu.edu.tw/~kent/DepenDNS"]];
 		//NSLog(@"button2\n");
 	}
 	// ... repeat for each button that you need to do something with
