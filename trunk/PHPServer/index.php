@@ -9,7 +9,10 @@ function a(){
 }
 
 var isPhone = navigator.userAgent;
-alert(isPhone);
+// match iPhone mobile device and android Phone
+if ( isPhone.match(/iPhone/i) != null ){
+	document.location.href="http://moon.cs.nthu.edu.tw/~kent/DepenDNS/DepenDNS/";
+} 
 </script>
 </head>
 <body>

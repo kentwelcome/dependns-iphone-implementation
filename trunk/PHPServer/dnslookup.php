@@ -46,7 +46,7 @@ class DNSLookup {
 		$ipchoice = new IPChoice( $match->getIPListAll() , $match->getRegion() );
 		$ipchoice->countGrade();
 
-		echo "Greade: ".$ipchoice->Grade."<br>\n";
+		echo "Grade: ".$ipchoice->Grade."<br>\n";
 
 
 	}
