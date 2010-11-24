@@ -17,12 +17,15 @@
 {
 	
 	IBOutlet UIWebView *webView;
+	IBOutlet UIBarButtonItem *OpenInSafari;
 	UIToolbar	*toolBar;
 	UITextField *urlField;
 	UITextField *userid;
 	UITextField *pass;
+	NSString	*DomainRegister;
 	UIActivityIndicatorView *activityIndicator;
 	MatchAlgo *DepenDNSEngine;
+	
 	
 	BOOL hasRunDepenDNS;
 	NSString* connectedIP;
@@ -33,11 +36,14 @@
 @property (nonatomic, retain) IBOutlet UIWebView *webView;
 @property (nonatomic, retain) UIToolbar* toolBar;
 @property (nonatomic, retain) NSString* connectedIP;
+@property (nonatomic, retain) NSString* DomainRegister;
 @property (nonatomic, retain) MKReverseGeocoder *reverseGeocoder;
+@property (nonatomic, retain) UITextField *urlField;
 
 - (void) accelerometer:(UIAccelerometer *)accelerometer didAccelerate:(UIAcceleration *)acceleration;
 - (void) ShowLoginDialog;
 - (void) GetGeoLocation;
+- (IBAction) OpenInSafari: (id)sender;
 
 // Delegate for MyCLControllerDelegate
 - (void)locationUpdate:(CLLocation *)location;
