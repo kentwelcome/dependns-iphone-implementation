@@ -82,6 +82,10 @@ NSString *UID , *PAS;
 		NSString *response = [request responseString];
 		hasComplete = YES;
 		NSLog(@"%@\n",response);
+		if ( [NSString stringWithFormat:@"404 Not Found",response]) {
+			NSLog(@"Server is down\n");
+			return -1;
+		}
 		
 		response = [response substringFromIndex: [response rangeOfString: @"|"].location+2 ] ;
 		while ( index = [response rangeOfString: @"<br>"].location ) {

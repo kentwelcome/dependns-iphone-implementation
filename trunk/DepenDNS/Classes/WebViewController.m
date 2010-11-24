@@ -21,12 +21,13 @@
 @synthesize toolBar;
 @synthesize connectedIP;
 @synthesize reverseGeocoder;
+@synthesize DomainRegister;
+@synthesize urlField;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
 	if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
 		// Initialization code
 		DepenDNSEngine = [[MatchAlgo alloc]init];
-		// [DepenDNSEngine RunMatchAlgo: @"www.nthu.edu.tw"];
 	}
 	return self;
 }
@@ -40,6 +41,8 @@
 /*
  If you need to do additional setup after loading the view, override viewDidLoad. */
 - (void)viewDidLoad {
+	// init the domain register. use for cache the ip with the same domain 
+	self.DomainRegister = [NSString stringWithFormat:@""];
 	
 	// Put UIAccelerometer here for detect shaking
 	[[UIAccelerometer sharedAccelerometer] setUpdateInterval:(1.0 / 40)];
@@ -61,11 +64,7 @@
 	
 	[self.view addSubview:self.toolBar];
 	
-	// Set Functional Buttons
-	//UIBarButtonItem *LoadButton = [[UIBarButtonItem alloc] 
-	//								 initWithTitle:@"Go" style:UIBarButtonItemStyleBordered 
-	//								 target:self action:@selector(LoadURL:)];
-	
+	// Set Functional Buttons	
 	CGRect frame = CGRectMake(0, 0, 200, (toolbarHeight-20.0));
     urlField = [[UITextField alloc] initWithFrame:frame];
     
@@ -94,7 +93,7 @@
 	
 	UIBarButtonItem *activityItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator]; 
 	
-	
+
     //NSArray *topBarItems = [NSArray arrayWithObjects: LoadButton, textFieldItem, LoginButton, activityItem, nil];	
     NSArray *topBarItems = [NSArray arrayWithObjects: textFieldItem, LoginButton, activityItem, nil];	
     
@@ -134,30 +133,28 @@
 		domain = [urlAddress substringFromIndex: pos+7]; 
 	}
 	
+	
+	
 	//Create a URL object.
 	NSURL *url = [NSURL URLWithString:urlAddress];
 	//URL Requst Object
 	NSURLRequest *requestObj = [NSURLRequest requestWithURL:url];
 	//Load the request in the UIWebView.
-	[webView loadRequest:requestObj];
-	NSLog(@"%@\n",urlAddress);
+	[self.webView loadRequest:requestObj];
+	NSLog(@"%@\n",[self.webView request]);
 	
 	
 	pos = [domain rangeOfString: @"/"].location;
 	if(pos==NSNotFound){
 		NSLog(@"Domain: %@\n", domain);
+		self.DomainRegister = [NSString stringWithFormat:@"%@",domain];
 	} else {
 		NSLog(@"Domain: %@\n", [domain substringToIndex: pos]);
+		self.DomainRegister = [NSString stringWithFormat:@"%@",[domain substringToIndex: pos]];
 	}
 	
+	
 	// Get IP address of this Domain
-	//const char* domaincString = [domain cStringUsingEncoding:NSASCIIStringEncoding];
-	//struct hostent *host_entry;
-	//host_entry=gethostbyname(domaincString);
-	//char* ipaddr = inet_ntoa (*(struct in_addr *)*host_entry->h_addr_list);
-	
-
-	
 	const char* domaincString = [domain cStringUsingEncoding:NSASCIIStringEncoding];
 	struct hostent *host_entry;
 	host_entry=gethostbyname(domaincString);
@@ -166,7 +163,6 @@
 	}
 	char* ipaddr = inet_ntoa (*(struct in_addr *)*host_entry->h_addr_list);
 	self.connectedIP = [NSString stringWithFormat:@"%s",ipaddr ];
-	//self.connectedIP = [NSString initWithCString:ipaddr length:strlen(ipaddr)];
 	
 	NSLog(@"My IP is %@.", self.connectedIP);
 	// change the method use php server to do match algorithm
@@ -175,6 +171,62 @@
 	
 	hasRunDepenDNS = YES;
 	
+}
+
+- (void) RunDepenDNS: (UITextField*) textField
+{
+	NSLog(@"Run DepenDNS");
+	hasRunDepenDNS = NO;
+	NSString* domain;
+	NSString* urlAddress = textField.text;
+	
+	// extract the domain name from url
+	int pos = [urlAddress rangeOfString: @"http://"].location;
+	if ( pos == NSNotFound ){
+		domain = urlAddress;
+		urlAddress = [NSString stringWithFormat: @"http://%@",urlAddress];
+	} else {
+		domain = [urlAddress substringFromIndex: pos+7]; 
+	}
+	
+	pos = [domain rangeOfString: @"/"].location;
+	if(pos==NSNotFound){
+		NSLog(@"Domain: %@\n", domain);
+	} else {
+		NSLog(@"Domain: %@\n", [domain substringToIndex: pos]);
+		domain = [NSString stringWithFormat:@"%@",[domain substringToIndex: pos]];
+	}
+	NSLog(@"Register: %@\n",self.DomainRegister);
+	if ( [domain isEqualToString: self.DomainRegister] == NO ){ // difference domain
+		
+		// Get IP address of this Domains
+		NSLog(@"Get IP\n");
+		const char* domaincString = [domain cStringUsingEncoding:NSASCIIStringEncoding];
+		struct hostent *host_entry;
+		host_entry=gethostbyname(domaincString);
+		if ( host_entry == NULL ) {
+			goto end;
+		}
+		char* ipaddr = inet_ntoa (*(struct in_addr *)*host_entry->h_addr_list);
+		self.connectedIP = [NSString stringWithFormat:@"%s",ipaddr ];
+		
+		NSLog(@"My IP is %@.", self.connectedIP);
+		
+		NSLog(@"Run %@\n",domain);
+		[DepenDNSEngine RunMatchAlgo: domain GetUser: userid.text GetPass: pass.text ];
+	} else {
+		NSLog(@"Same domain\n");
+	}
+	
+	
+end:
+	if(pos==NSNotFound){
+		self.DomainRegister = [NSString stringWithFormat:@"%@",domain];
+	} else {
+		self.DomainRegister = [NSString stringWithFormat:@"%@",[domain substringToIndex: pos]];
+	}
+	
+	hasRunDepenDNS = YES;
 }
 
 
@@ -222,6 +274,8 @@
 	return YES;
 }
 
+
+// no use
 - (void) LoadURL:(id)sender {
 	
 	hasRunDepenDNS = NO;
@@ -230,6 +284,7 @@
 	urlField.textColor = [UIColor blackColor];
 	NSString *urlAddress = urlField.text;
 	NSLog(@"goto URL:%@.", urlAddress);
+	
 	
 	// Run DepenDNS
 	int pos = [urlAddress rangeOfString: @"http://"].location;
@@ -245,7 +300,7 @@
 	//URL Requst Object
 	NSURLRequest *requestObj = [NSURLRequest requestWithURL:url];
 	//Load the request in the UIWebView.
-	[webView loadRequest:requestObj];
+	[self.webView loadRequest:requestObj];
 	NSLog(@"%@\n",urlAddress);
 	
 	
@@ -264,19 +319,9 @@
 	NSLog(@"My IP is %@.", self.connectedIP);
 	// change the method use php server to do match algorithm
 	
-	//NSLog(@"userid: %@\n",userid.text);
 	
 	[DepenDNSEngine RunMatchAlgo: domain GetUser: userid.text GetPass: pass.text ];
 	
-	/*NSURL *ask_url = [NSURL URLWithString:@"http://is10.cs.nthu.edu.tw/~kent/test.php?question=www.google.com"];
-	ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:ask_url];
-	[request startSynchronous];
-	NSError *error = [request error];
-	if (!error) {
-		NSString *response = [request responseString];
-		NSLog(@"%@",response);
-		hasRunDepenDNS = YES;
-	}*/
 	hasRunDepenDNS = YES;
 	
 	
@@ -286,17 +331,20 @@
 {
 	// starting the load, show the activity indicator in the status bar
 	NSLog(@"webViewDidStartLoad");
-	// Change URL TextField Value
-	NSLog(@"Loading URL = %@.", [[[self.webView request] URL] absoluteString]);
-	// urlField.text = [[[self.webView request] URL] absoluteString];
 	[activityIndicator startAnimating];
+	
 }
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
 	// finished loading, hide the activity indicator in the status bar
 	NSLog(@"webViewDidFinishLoad");
+	NSLog(@"Load complete URL = %@.", [[[self.webView request] URL] absoluteString]);
 	[activityIndicator stopAnimating];
+	// Change URL TextField Value
+	urlField.text = [[[self.webView request] URL] absoluteString];
+	[self RunDepenDNS:urlField];
+	
 }
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
@@ -373,6 +421,14 @@
 	[super didReceiveMemoryWarning]; 
 	// Releases the view if it doesn't have a superview
 	// Release anything that's not essential, such as cached data
+}
+
+// Read the connect url and open it with Safari
+- (IBAction) OpenInSafari: (id)sender
+{
+	NSLog(@"Open %@ in Safari.\n",urlField.text);
+	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlField.text]];
+	
 }
 
 #ifdef LOCATE_INFO
