@@ -82,7 +82,9 @@ NSString *UID , *PAS;
 		NSString *response = [request responseString];
 		hasComplete = YES;
 		NSLog(@"%@\n",response);
-		if ( [NSString stringWithFormat:@"404 Not Found",response]) {
+		
+		//NSLog(@"%@\n",[response rangeOfString: @"404 Not Found"].);
+		if ( 0 ) {
 			NSLog(@"Server is down\n");
 			return -1;
 		}
@@ -98,18 +100,18 @@ NSString *UID , *PAS;
 			
 			
 			//NSLog(@"%@.\n",CanUseIP);
-			if ( [CanUseIP rangeOfString: @"Greade:"].location != NSNotFound ){ // get dependns greade
-				index = [CanUseIP rangeOfString: @"Greade:"].location;
-				IP = [NSString stringWithFormat:@"%@",[CanUseIP substringFromIndex:index+8]];
-				//NSLog(@"G:%@\n",IP);
+			if ( [CanUseIP rangeOfString: @"Grade:"].location != NSNotFound ){ // get dependns greade
+				index = [CanUseIP rangeOfString: @"Grade: "].location;
+				IP = [NSString stringWithFormat:@"%@",[CanUseIP substringFromIndex:index+7]];
+				NSLog(@"G:%@\n",IP);
 				IP_gread = [ IP intValue ];
-				NSLog(@"Gread: %d\n",IP_gread);
+				NSLog(@"Grade: %d\n",IP_gread);
 				break;
 			} else {	// get can use IP
 				NSLog(@"ver: %@\n",CanUseIP);
 				[verifired_ip addObject: CanUseIP];
 			}
-			
+			//NSLog(@"end");
 			response = [response substringFromIndex:index+5];
 		}
 	}
@@ -144,6 +146,7 @@ NSString *UID , *PAS;
 				NSLog(@"Gread: %d\n",IP_gread);
 				break;
 			} else {	// get can use IP
+				NSLog(@"add object %@\n",CanUseIP);
 				[verifired_ip addObject: CanUseIP];
 			}
 

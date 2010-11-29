@@ -18,6 +18,7 @@
 	
 	IBOutlet UIWebView *webView;
 	IBOutlet UIBarButtonItem *OpenInSafari;
+	IBOutlet UIBarButtonItem *OpenWithTabs;
 	UIToolbar	*toolBar;
 	UITextField *urlField;
 	UITextField *userid;
