@@ -344,6 +344,23 @@ end:
 	// Change URL TextField Value
 	urlField.text = [[[self.webView request] URL] absoluteString];
 	[self RunDepenDNS:urlField];
+	if(hasRunDepenDNS) {
+		int res = [DepenDNSEngine checkTrustWorthy:self.connectedIP];
+		NSLog(@"res = %d.", res);
+		
+		if(res==0) {
+			NSLog(@"Safe!");
+			urlField.textColor = [UIColor blueColor];
+		}
+		if(res==1) {
+			NSLog(@"Might be suffer pharming!");
+			urlField.textColor = [UIColor redColor];
+		}
+		if(res==-1) {
+			NSLog(@"DNS Query Failed! Press Detect Again!");
+			urlField.textColor = [UIColor orangeColor];
+		}
+	}
 	
 }
 
