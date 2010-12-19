@@ -98,7 +98,10 @@
     NSArray *topBarItems = [NSArray arrayWithObjects: textFieldItem, LoginButton, activityItem, nil];	
     
 	[self.toolBar setItems:topBarItems animated:NO];
-	[self ShowLoginDialog];
+	if ([self CheckPlistValues] == false){ 
+		[self ShowLoginDialog];
+	}
+
 	hasRunDepenDNS = NO;
 }
 
@@ -163,7 +166,7 @@
 	}
 	char* ipaddr = inet_ntoa (*(struct in_addr *)*host_entry->h_addr_list);
 	self.connectedIP = [NSString stringWithFormat:@"%s",ipaddr ];
-	
+	//NSLog(@"hit\n");
 	NSLog(@"My IP is %@.", self.connectedIP);
 	// change the method use php server to do match algorithm
 	
@@ -213,7 +216,7 @@
 		NSLog(@"My IP is %@.", self.connectedIP);
 		
 		NSLog(@"Run %@\n",domain);
-		[DepenDNSEngine RunMatchAlgo: domain GetUser: userid.text GetPass: pass.text ];
+		[DepenDNSEngine RunMatchAlgo: domain GetUser: UID GetPass: PWD ];
 	} else {
 		NSLog(@"Same domain\n");
 	}
@@ -275,58 +278,6 @@ end:
 }
 
 
-// no use
-- (void) LoadURL:(id)sender {
-	
-	hasRunDepenDNS = NO;
-	self.connectedIP = @"";
-	NSString* domain;
-	urlField.textColor = [UIColor blackColor];
-	NSString *urlAddress = urlField.text;
-	NSLog(@"goto URL:%@.", urlAddress);
-	
-	
-	// Run DepenDNS
-	int pos = [urlAddress rangeOfString: @"http://"].location;
-	if ( pos == NSNotFound ){
-		domain = urlAddress;
-		urlAddress = [NSString stringWithFormat: @"http://%@",urlAddress];
-	} else {
-		domain = [urlAddress substringFromIndex: pos+7]; 
-	}
-
-	//Create a URL object.
-	NSURL *url = [NSURL URLWithString:urlAddress];
-	//URL Requst Object
-	NSURLRequest *requestObj = [NSURLRequest requestWithURL:url];
-	//Load the request in the UIWebView.
-	[self.webView loadRequest:requestObj];
-	NSLog(@"%@\n",urlAddress);
-	
-	
-	pos = [domain rangeOfString: @"/"].location;
-	if(pos==NSNotFound)
-		NSLog(@"Domain: %@", domain);
-	else
-		NSLog(@"Domain: %@", [domain substringToIndex: pos]);
-	
-	// Get IP address of this Domain
-	const char* domaincString = [domain cStringUsingEncoding:NSASCIIStringEncoding];
-	struct hostent *host_entry;
-	host_entry=gethostbyname(domaincString);
-	char* ipaddr = inet_ntoa (*(struct in_addr *)*host_entry->h_addr_list);
-	self.connectedIP = [NSString initWithCString:ipaddr length:strlen(ipaddr)];
-	NSLog(@"My IP is %@.", self.connectedIP);
-	// change the method use php server to do match algorithm
-	
-	
-	[DepenDNSEngine RunMatchAlgo: domain GetUser: userid.text GetPass: pass.text ];
-	
-	hasRunDepenDNS = YES;
-	
-	
-}
-
 - (void)webViewDidStartLoad:(UIWebView *)webView
 {
 	// starting the load, show the activity indicator in the status bar
@@ -375,6 +326,28 @@ end:
 	[self.webView loadHTMLString:errorString baseURL:nil];
 }
 
+- (BOOL) CheckPlistValues 
+{
+	//Get the Plist values	
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	NSString *UserName = [defaults objectForKey:@"name_preference"];
+	NSString *Password = [defaults objectForKey:@"password_preference"];
+	NSLog(@"User:\t%@\n",UserName);
+	NSLog(@"Passwd:\t%@\n",Password);
+
+	int result = [DepenDNSEngine RunMatchAlgo:@"moon.cs.nthu.edu.tw" GetUser:UserName GetPass:Password];
+	if (result < 0){
+		return false;
+	} else {
+		NSLog(@"login ok\n");
+		UID = [NSString stringWithString:UserName];
+		PWD = [NSString stringWithString:Password];
+		
+		return true;
+	}
+
+}
+
 - (void) ShowLoginDialog
 {
 
@@ -417,6 +390,7 @@ end:
 
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)index
 {
+	
 	if (index == 1)	// button Login
 	{
 		//NSLog(@"button 1\n");

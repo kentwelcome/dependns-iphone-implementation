@@ -27,7 +27,8 @@
 	UIActivityIndicatorView *activityIndicator;
 	MatchAlgo *DepenDNSEngine;
 	
-	
+	NSString *UID;
+	NSString *PWD;
 	BOOL hasRunDepenDNS;
 	NSString* connectedIP;
 	MyCLController *locationController;
@@ -43,11 +44,14 @@
 
 - (void) accelerometer:(UIAccelerometer *)accelerometer didAccelerate:(UIAcceleration *)acceleration;
 - (void) ShowLoginDialog;
+- (BOOL) CheckPlistValues;
 - (void) GetGeoLocation;
 - (IBAction) OpenInSafari: (id)sender;
 
+
+#ifdef LOCATE_INFO
 // Delegate for MyCLControllerDelegate
 - (void)locationUpdate:(CLLocation *)location;
 - (void)locationError:(NSError *)error;
-
+#endif
 @end

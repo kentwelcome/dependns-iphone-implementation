@@ -57,8 +57,8 @@ NSString *UID , *PAS;
 	PAS = paswd;
 	
 	NSLog(@"User:%@\nPass:%@\n",user,paswd);
-	[self ask_php_server_by_post: domain ];
-	return 0;
+	return [self ask_php_server_by_post: domain ];
+	 
 }
 
 
