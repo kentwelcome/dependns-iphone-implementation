@@ -52,6 +52,7 @@ $port	=53;
 $timeout=60;
 $udp	=true;
 $type	="A";
+$debug	= "";
 
 for ( $i = 0 ;$i < count($resolverList) ; $i++ ){
 	$query_ans[$i] = new DNSQuery($resolverList[$i],
