@@ -24,44 +24,32 @@ if ( $AskUrl != "" ){
 	exit(0);
 }
 
+// read configure file from dependns.ini
+$Config = parse_ini_file("dependns.ini",true);
+
 // set resolver list
-$resolverList[] = "168.95.1.1";
-$resolverList[] = "168.95.192.1";
-$resolverList[] = "139.175.55.244";
-$resolverList[] = "139.175.252.16";
-$resolverList[] = "139.175.150.20";
-$resolverList[] = "139.175.10.20";
-$resolverList[] = "203.187.0.6";
-$resolverList[] = "203.133.1.8";
-$resolverList[] = "211.78.130.1";
-$resolverList[] = "211.78.130.2";
-$resolverList[] = "61.56.211.185";
-$resolverList[] = "211.78.215.200";
-$resolverList[] = "211.78.215.137";
-$resolverList[] = "210.200.211.193";
-$resolverList[] = "210.200.211.225";
-$resolverList[] = "203.79.224.10";
-$resolverList[] = "203.79.224.30";
+$tmp_array = $Config['ResolverList']['list']
+for ( $i = 0 ; count($tmp_array) ; $i++ ){
+	$resolverList[] = $tmp_array[$i];
+}
 
 // set History List
 $HistoryList = array();
 
 
 // send dns query
+if ( $Config['Configure']['Timeout'] ){
+	$timeout=$Config['Configure']['Timeout']; 
+} else {
+	$timeout=10;
+}
 $port	=53;
-$timeout=60;
 $udp	=true;
 $type	="A";
 $debug	= "";
 
 for ( $i = 0 ;$i < count($resolverList) ; $i++ ){
-	$query_ans[$i] = new DNSQuery($resolverList[$i],
-			$port,
-			$timeout,
-			$udp,
-			$debug); 
-
-
+	$query_ans[$i] = new DNSQuery($resolverList[$i],$port,$timeout,$udp,$debug); 
 	$resultList[$i] = $query_ans[$i]->Query($question,$type);
 	if ($query_ans[$i]->error){
 		echo"erroe!<br>\n";
@@ -79,6 +67,17 @@ for ( $i = 0 ;$i < count($resolverList) ; $i++ ){
 
 // check history database
 // db link
+if ( $Config['DataBase'] ) { 
+	$DB_host = $Config['DataBase']['SQL_Server'];
+	$DB_ID   = $Config['DataBase']['SQL_ID'];
+	$DB_PWD  = $Config['DataBase']['SQL_PWD'];
+
+
+} else {
+	$DB_host = "localhost";
+	$DB_ID	 = "dependns";
+	$DB_PWD	 = "dependns@833";
+}
 $link = mysql_connect("localhost", "dependns", "dependns@833");
 if ( mysql_select_db("dependns", $link) ){
 	// check user passwd 
