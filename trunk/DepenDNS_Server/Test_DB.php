@@ -12,8 +12,9 @@ require("IPChoose.php");
 if (isset($_REQUEST['question']))
 	$question=$_REQUEST['question'];
 else{  
-	echo "no url<br>";
-	exit(0);
+	//echo "no url<br>";
+	$question = "www.cs.nthu.edu.tw";
+	//exit(0);
 }
 
 // read configure file from dependns.ini
@@ -70,84 +71,84 @@ if ( $Config['DataBase'] ) {
 	$DB_PWD	 = "dependns@833";
 }
 //$link = mysql_connect("localhost", "dependns", "dependns@833");
-$link = odbc_connect("DepenDNS",$DB_ID,$DB_PWD);
+$link = odbc_connect("dependns",$DB_ID,$DB_PWD);
 if ($link){
-	if ( mysql_select_db("dependns", $link) ){
+	//if ( mysql_select_db("dependns", $link) ){
 
-		// check table domain_id 
-		$sql_query = "SELECT id FROM domain_id WHERE domain_name = '".$question."';";
-		//$result = mysql_query($sql_query);
-		$result = odbc_exec($link,$sql_query);
-		if ( !$result ){
-			echo "can not select from table domain_id<br>\n";
-		}else {
-			//$row = mysql_fetch_row($result);
-			$row = odbc_fetch_row($result);
-			if ( $row[0] == null ){
-				//echo "empty<br>";
-				$sql_query = "INSERT INTO domain_id (id,domain_name) VALUES( NULL , '".$question."');";
+	// check table domain_id 
+	$sql_query = "SELECT id FROM domain_id WHERE domain_name = '".$question."';";
+	//$result = mysql_query($sql_query);
+	$result = odbc_exec($link,$sql_query);
+	if ( !$result ){
+		echo "can not select from table domain_id<br>\n";
+	}else {
+		//$row = mysql_fetch_row($result);
+		$row = odbc_fetch_array($result);
+		if ( $row['id'] == null ){
+			echo "empty<br>";
+			$sql_query = "INSERT INTO domain_id (id,domain_name) VALUES( NULL , '".$question."');";
 
-				//mysql_query($sql_query);
-				odbc_exec($sql_query);
+			//mysql_query($sql_query);
+			odbc_exec($link,$sql_query);
 
-				$sql_query = "SELECT id FROM domain_id WHERE domain_name = '".$question."';";     
-				//mysql_query($sql_query);
-				odbc_exec($sql_query);
-				//$newId = mysql_result(mysql_query($sql_query),0);
-				$newId = odbc_result(odbc_exec($sql_query),0);
+			$sql_query = "SELECT id FROM domain_id WHERE domain_name = '".$question."';";     
+			//mysql_query($sql_query);
+			$link = odbc_exec($link,$sql_query);
+			//$newId = mysql_result(mysql_query($sql_query),0);
+			$newId = odbc_result($link,0);
+			echo "$newId\n<br>";
+			$sql_query = "CREATE TABLE domain_".$newId."(`id` BIGINT( 255 ) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,`round` INT( 255 ) UNSIGNED NOT NULL,`ip` VARCHAR( 16 ) NOT NULL,`ttl` BIGINT( 255 ) UNSIGNED NOT NULL,`date_time` DATETIME NOT NULL,`resolverIP` VARCHAR( 16 ) NOT NULL)ENGINE = MYISAM";
+			//echo "create table domain_".$newId."<br>";
+			//mysql_query($sql_query);
+			odbc_exec($link,$sql_query);
+		}else{
+			//echo "insert resolveAns into domain_".$row['id']."<br>";
+			$id = $row['id'];
+			for ( $i = 0 ;$i < count($resolverList) ; $i++ ){
+				for ( $j = 0 ; 
+				$j < $resultList[$i]->count ; 
+				$j++ ) {
 
-				$sql_query = "CREATE TABLE domain_".$newId."(`id` BIGINT( 255 ) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,`round` INT( 255 ) UNSIGNED NOT NULL,`ip` VARCHAR( 16 ) NOT NULL,`ttl` BIGINT( 255 ) UNSIGNED NOT NULL,`date_time` DATETIME NOT NULL,`resolverIP` VARCHAR( 16 ) NOT NULL)ENGINE = MYISAM";
-				//echo "create table domain_".$newId."<br>";
-				//mysql_query($sql_query);
-				odbc_exec($sql_query);
-			}else{
-				//echo "insert resolveAns into domain_".$row[0]."<br>";
-				$id = $row[0];
-				for ( $i = 0 ;$i < count($resolverList) ; $i++ ){
-					for ( $j = 0 ; 
-					$j < $resultList[$i]->count ; 
-					$j++ ) {
-
-						if ( $resultList[$i]->results[$j]->type == 1 ){                              
-							$sql_query = "INSERT INTO domain_"
-								.$id.
-								"(id,ip,resolverIP) VALUES(NULL,'"
-								.$resultList[$i]->results[$j]->data.
-								"','"
-								.$resolverList[$i].
-								"');";
-							//mysql_query($sql_query);
-							odbc_exec($sql_query);
-						} 
-					}
+					if ( $resultList[$i]->results[$j]->type == 1 ){                              
+						$sql_query = "INSERT INTO domain_"
+							.$id.
+							"(id,ip,resolverIP) VALUES(NULL,'"
+							.$resultList[$i]->results[$j]->data.
+							"','"
+							.$resolverList[$i].
+							"');";
+						//mysql_query($sql_query);
+						odbc_exec($link,$sql_query);
+					} 
 				}
-				// do query
-				$sql_query = "select ip , count(ip) from domain_$id group by ip;";
-				//echo $sql_query;
-				//$result = mysql_query($sql_query);
-				$result = odbc_exec($sql_query);
-				if ( $result ){
-					while ( $row=odbc_fetch_row($result) ){
-						$ip = $row[0];	
-						$bClass = getBClass($ip);
-						$flag = false;
-						for ( $i = 0 ; $i < count($HistoryList) ; $i++ ){
-							if ( $bClass == $HistoryList[$i]->getBClass() )	{
-								$HistoryList[$i]->addIP($ip,$row[1]);
-								$flag = true;
-								break;
-							}
-						}
-						if (!$flag){
-							$HistoryList[] = new Answer($bClass,$ip,$row[1]);
+			}
+			// do query
+			$sql_query = "select ip , count(ip) from domain_$id group by ip;";
+			//echo $sql_query;
+			//$result = mysql_query($sql_query);
+			$result = odbc_exec($link,$sql_query);
+			if ( $result ){
+				while ( $row=odbc_fetch_array($result) ){
+					$ip = $row['ip'];	
+					$bClass = getBClass($ip);
+					$flag = false;
+					for ( $i = 0 ; $i < count($HistoryList) ; $i++ ){
+						if ( $bClass == $HistoryList[$i]->getBClass() )	{
+							$HistoryList[$i]->addIP($ip,$row['count(ip)']);
+							$flag = true;
+							break;
 						}
 					}
-				} else {
-					echo "bad!<br>\n";
+					if (!$flag){
+						$HistoryList[] = new Answer($bClass,$ip,$row['count(ip)']);
+					}
 				}
+			} else {
+				echo "bad!<br>\n";
 			}
 		}
 	}
+	//}
 	odbc_close($link);
 }
 
