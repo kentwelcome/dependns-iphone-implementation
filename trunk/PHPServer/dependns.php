@@ -27,9 +27,13 @@ if ( $AskUrl != "" ){
 // read configure file from dependns.ini
 $Config = parse_ini_file("dependns.ini",true);
 
+if (!$Config){
+	exit(0);
+}
+
 // set resolver list
-$tmp_array = $Config['ResolverList']['list']
-for ( $i = 0 ; count($tmp_array) ; $i++ ){
+$tmp_array = $Config['ResolverList']['list'];
+for ( $i = 0 ; $i < count($tmp_array) ; $i++ ){
 	$resolverList[] = $tmp_array[$i];
 }
 
@@ -71,8 +75,6 @@ if ( $Config['DataBase'] ) {
 	$DB_host = $Config['DataBase']['SQL_Server'];
 	$DB_ID   = $Config['DataBase']['SQL_ID'];
 	$DB_PWD  = $Config['DataBase']['SQL_PWD'];
-
-
 } else {
 	$DB_host = "localhost";
 	$DB_ID	 = "dependns";
@@ -163,12 +165,6 @@ if ( mysql_select_db("dependns", $link) ){
 
 mysql_close();
 
-for ( $i = 0 ; $i < count($HistoryList) ; $i++ ){
-	//for ( $j = 0 ; $j < count($HistoryList[$i]->ipList) ; $j++ ){
-	//echo $HistoryList[$i]->ipList[$j]->ip." times: ".$HistoryList[$i]->ipList[$j]->count."<br>";
-	//}
-	//echo $HistoryList[$i]->getBClass()." times: ".$HistoryList[$i]->classCount."<br>";
-}
 
 // do dependns algorithm
 echo "|\n";
