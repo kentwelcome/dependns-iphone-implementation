@@ -12,9 +12,9 @@ require("IPChoose.php");
 if (isset($_REQUEST['question']))
 	$question=$_REQUEST['question'];
 else{  
-	//echo "no url<br>";
-	$question = $_SERVER['argv'][1];//"www.cs.nthu.edu.tw";
-	//exit(0);
+	echo "no url<br>";
+	//$question = $_SERVER['argv'][1];//"www.cs.nthu.edu.tw";
+	exit(0);
 }
 
 // read configure file from dependns.ini
@@ -141,7 +141,7 @@ if ($odbc_id){
 			}
 			// do query
 			//$sql_query = "select ip , count(ip) from domain_$id group by ip;";
-			$sql_query = "select ip , counter from domain_DB where domain_id = $id group by ip;";
+			$sql_query = "select ip , counter from domain_DB where domain_id = $id;";
 			$result = odbc_exec($odbc_id,$sql_query);
 			if ( $result ){
 				while ( $row=odbc_fetch_array($result) ){
