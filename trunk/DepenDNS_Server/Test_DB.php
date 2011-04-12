@@ -13,7 +13,6 @@ if (isset($_REQUEST['question']))
 	$question=$_REQUEST['question'];
 else{  
 	echo "no url<br>";
-	//$question = $_SERVER['argv'][1];//"www.cs.nthu.edu.tw";
 	exit(0);
 }
 
@@ -43,10 +42,10 @@ $debug	= "";
 
 for ( $i = 0 ;$i < count($resolverList) ; $i++ ){
 	$query_ans[$i] = new DNSQuery($resolverList[$i],$port,$timeout,$udp,$debug); 
-	$resultList[$i] = $query_ans[$i]->Query($question,$type);
 	if ($query_ans[$i]->error){
-		echo"erroe!<br>\n";
+		echo"Error: Can't access resolver $resolverList[$i]<br>\n";
 	} else {
+		$resultList[$i] = $query_ans[$i]->Query($question,$type);
 		$counter = 0;
 		for ( $j = 0 ; $j < $resultList[$i]->count ; $j++ ){
 			if ( $resultList[$i]->results[$j]->type == 1 ){
@@ -70,31 +69,25 @@ if ( $Config['DataBase'] ) {
 	$DB_ID	 = "dependns";
 	$DB_PWD	 = "dependns@833";
 }
-//$link = mysql_connect("localhost", "dependns", "dependns@833");
+
 $odbc_id = odbc_connect("dependns",$DB_ID,$DB_PWD);
 if ($odbc_id){
-	//if ( mysql_select_db("dependns", $link) ){
 
 	// check table domain_id 
 	$sql_query = "SELECT id FROM domain_id WHERE domain_name = '".$question."';";
-	//$result = mysql_query($sql_query);
 	$result = odbc_exec($odbc_id,$sql_query);
 	if ( !$result ){
 		echo "can not select from table domain_id<br>\n";
 	}else {
-		//$row = mysql_fetch_row($result);
 		$row = odbc_fetch_array($result);
 		if ( $row['id'] == null ){
 			echo "empty<br>\n";
 			$sql_query = "INSERT INTO domain_id (id,domain_name) VALUES( NULL , '".$question."');";
 
-			//mysql_query($sql_query);
 			odbc_exec($odbc_id,$sql_query);
 
 			$sql_query = "SELECT id FROM domain_id WHERE domain_name = '".$question."';";     
-			//mysql_query($sql_query);
 			$result = odbc_exec($odbc_id,$sql_query);
-			//$newId = mysql_result(mysql_query($sql_query),0);
 			$newId = odbc_result($result,1);
 
 			for ( $i = 0 ; $i < count($resolverList) ; $i++ ){
@@ -108,9 +101,8 @@ if ($odbc_id){
 					}
 				}
 			}
-
 		}else{
-			//echo "insert resolveAns into domain_".$row['id']."<br>";
+			echo "insert resolveAns into domain_".$row['id']."<br>";
 			$id = $row['id'];
 			for ( $i = 0 ;$i < count($resolverList) ; $i++ ){
 				for ( $j = 0 ; 
@@ -123,6 +115,7 @@ if ($odbc_id){
 							"' and resolver = '".$resolverList[$i]."';";
 						$result = odbc_exec($odbc_id,$sql_query);
 						$row = odbc_fetch_row($result);
+
 						// add new ip when resolve ip change
 						if ( $row == false ){	
 							$sql_query = "INSERT INTO domain_DB (domain_id,ip,resolver) VALUES('"
@@ -140,8 +133,7 @@ if ($odbc_id){
 				}
 			}
 			// do query
-			//$sql_query = "select ip , count(ip) from domain_$id group by ip;";
-			$sql_query = "select ip , counter from domain_DB where domain_id = $id;";
+			$sql_query = "select ip , counter from domain_DB where domain_id = $id group by ip;";
 			$result = odbc_exec($odbc_id,$sql_query);
 			if ( $result ){
 				while ( $row=odbc_fetch_array($result) ){
@@ -150,13 +142,15 @@ if ($odbc_id){
 					$flag = false;
 					for ( $i = 0 ; $i < count($HistoryList) ; $i++ ){
 						if ( $bClass == $HistoryList[$i]->getBClass() )	{
-							$HistoryList[$i]->addIP($ip,$row['counter']);
+							$num = $row['counter'];
+							$HistoryList[$i]->addIP($ip,$num);
 							$flag = true;
 							break;
 						}
 					}
 					if (!$flag){
-						$HistoryList[] = new Answer($bClass,$ip,$row['counter']);
+						$num = $row['counter'];
+						$HistoryList[] = new Answer($bClass,$ip,$num);
 					}
 				}
 			} else {
@@ -164,7 +158,6 @@ if ($odbc_id){
 			}
 		}
 	}
-	//}
 	odbc_close($odbc_id);
 }
 
@@ -181,7 +174,6 @@ function getBClass( $ip ){
 			$dotCount++;
 		}
 		if( $dotCount == 2 ){
-			//echo substr($ip,0,$i);
 			return substr($ip,0,$i);
 		}
 	}
