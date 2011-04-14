@@ -139,7 +139,7 @@ if ($odbc_id){
 				}
 			}
 			// Calculate the sum of counter 
-			$sql_query = "select ip , counter from domain_DB where domain_id = $id and resolver <> 'Tester' group by ip;";
+			$sql_query = "select ip , counter from domain_DB where domain_id = $id and resolver <> 'Tester' group by ip , counter;";
 			$result = odbc_exec($odbc_id,$sql_query);
 			if ( $result ){
 				while ( $row=odbc_fetch_array($result) ){
