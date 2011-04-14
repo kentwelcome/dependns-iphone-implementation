@@ -32,6 +32,8 @@ if ($odbc_id){
 	$result = odbc_exec($odbc_id,$sql_query);
 	if ( $result ){
 		$row = odbc_fetch_array($result);
+
+		// Can find data in the database
 		if ( $row['id'] != null ){
 			$id = $row['id'];
 			$sql_query = "SELECT * FROM domain_DB WHERE domain_id = $id ORDER BY resolver;";
@@ -60,6 +62,7 @@ if ($odbc_id){
 				echo "Error: <br>\n";
 			}
 		} else {
+			// Can't find data in database. Ask by DNS resolver
 			echo "There is no domain_id of '$question' in DataBase.<br>\n";
 			echo "Sending DNS query to Resolvers.<br>\n";
 

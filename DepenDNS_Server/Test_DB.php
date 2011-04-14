@@ -81,7 +81,7 @@ if ($odbc_id){
 	}else {
 		$row = odbc_fetch_array($result);
 		if ( $row['id'] == null ){
-			echo "empty<br>\n";
+			echo "Insert $question to domain_id.<br>\n";
 			$sql_query = "INSERT INTO domain_id (id,domain_name) VALUES( NULL , '".$question."');";
 
 			odbc_exec($odbc_id,$sql_query);
@@ -90,6 +90,8 @@ if ($odbc_id){
 			$result = odbc_exec($odbc_id,$sql_query);
 			$newId = odbc_result($result,1);
 
+
+			// insert DNS result to domain_DB
 			for ( $i = 0 ; $i < count($resolverList) ; $i++ ){
 				for ( $j = 0 ; $j < $resultList[$i]->count ; $j++ ){
 					if ( $resultList[$i]->results[$j]->type == 1 ){
@@ -102,13 +104,14 @@ if ($odbc_id){
 				}
 			}
 		}else{
-			echo "insert resolveAns into domain_".$row['id']."<br>";
+			echo "Insert resolveAns into domain_".$row['id']."<br>";
 			$id = $row['id'];
 			for ( $i = 0 ;$i < count($resolverList) ; $i++ ){
 				for ( $j = 0 ; 
 				$j < $resultList[$i]->count ; 
 				$j++ ) {
 
+					// Update the resolver counter
 					if ( $resultList[$i]->results[$j]->type == 1 ){                              
 						$sql_query = "select domain_id from domain_DB where domain_id = '".$id.
 							"' and ip = '".$resultList[$i]->results[$j]->data.
@@ -118,12 +121,15 @@ if ($odbc_id){
 
 						// add new ip when resolve ip change
 						if ( $row == false ){	
+							echo "Insert new ip $resultList[$i]->results[$j]->data to domain_$id.<br>\n";
 							$sql_query = "INSERT INTO domain_DB (domain_id,ip,resolver) VALUES('"
 								.$id."','"
 								.$resultList[$i]->results[$j]->data."','"
 								.$resolverList[$i]."')";
 							odbc_exec($odbc_id,$sql_query);
 						}
+
+						// Update the counter
 						$sql_query = "UPDATE domain_DB SET counter = counter+1 where domain_id = '".$id.
 							"' and ip = '".$resultList[$i]->results[$j]->data.
 							"' and resolver = '".$resolverList[$i].
@@ -132,7 +138,7 @@ if ($odbc_id){
 					} 
 				}
 			}
-			// do query
+			// Calculate the sum of counter 
 			$sql_query = "select ip , counter from domain_DB where domain_id = $id group by ip;";
 			$result = odbc_exec($odbc_id,$sql_query);
 			if ( $result ){
@@ -154,7 +160,7 @@ if ($odbc_id){
 					}
 				}
 			} else {
-				echo "bad!<br>\n";
+				echo "Error: Can't find the result of domain_$id.<br>\n";
 			}
 		}
 	}
@@ -163,7 +169,7 @@ if ($odbc_id){
 
 
 // do dependns algorithm
-echo "|\n";
+echo "<br>Usable IP of $question<br>\n";
 $dolookup = new DNSLookup(); 
 $dolookup->run_algo( $resultList , $HistoryList , $oneTimeCount );
 
