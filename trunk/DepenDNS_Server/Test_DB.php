@@ -139,7 +139,7 @@ if ($odbc_id){
 				}
 			}
 			// Calculate the sum of counter 
-			$sql_query = "select ip , counter from domain_DB where domain_id = $id and resolver <> 'Tester' group by ip , counter;";
+			$sql_query = "select ip , sum(counter) from domain_DB where domain_id = $id and resolver <> 'Tester' group by ip";
 			$result = odbc_exec($odbc_id,$sql_query);
 			if ( $result ){
 				while ( $row=odbc_fetch_array($result) ){
@@ -148,14 +148,14 @@ if ($odbc_id){
 					$flag = false;
 					for ( $i = 0 ; $i < count($HistoryList) ; $i++ ){
 						if ( $bClass == $HistoryList[$i]->getBClass() )	{
-							$num = $row['counter'];
+							$num = $row['sum(counter)'];
 							$HistoryList[$i]->addIP($ip,$num);
 							$flag = true;
 							break;
 						}
 					}
 					if (!$flag){
-						$num = $row['counter'];
+						$num = $row['sum(counter)'];
 						$HistoryList[] = new Answer($bClass,$ip,$num);
 					}
 				}
