@@ -145,17 +145,18 @@ if ($odbc_id){
 				while ( $row=odbc_fetch_array($result) ){
 					$ip = $row['ip'];	
 					$bClass = getBClass($ip);
+					$Key = array_keys($row);
 					$flag = false;
 					for ( $i = 0 ; $i < count($HistoryList) ; $i++ ){
 						if ( $bClass == $HistoryList[$i]->getBClass() )	{
-							$num = $row['sum(counter)'];
+							$num = $Key[1];
 							$HistoryList[$i]->addIP($ip,$num);
 							$flag = true;
 							break;
 						}
 					}
 					if (!$flag){
-						$num = $row['sum(counter)'];
+						$num = $Key[1];
 						$HistoryList[] = new Answer($bClass,$ip,$num);
 					}
 				}
