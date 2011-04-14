@@ -121,7 +121,7 @@ if ($odbc_id){
 
 						// add new ip when resolve ip change
 						if ( $row == false ){	
-							echo "Insert new ip $resultList[$i]->results[$j]->data to domain_$id.<br>\n";
+							echo "Insert new ip ".$resultList[$i]->results[$j]->data to domain_$id."<br>\n";
 							$sql_query = "INSERT INTO domain_DB (domain_id,ip,resolver) VALUES('"
 								.$id."','"
 								.$resultList[$i]->results[$j]->data."','"
