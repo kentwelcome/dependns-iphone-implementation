@@ -53,7 +53,7 @@ for ( $i = 0 ;$i < count($resolverList) ; $i++ ){
 	$query_ans[$i] = new DNSQuery($resolverList[$i],$port,$timeout,$udp,$debug); 
 	$resultList[$i] = $query_ans[$i]->Query($question,$type);
 	if ($query_ans[$i]->error){
-		echo"erroe!<br>\n";
+		echo"error!<br>\n";
 	} else {
 		$counter = 0;
 		for ( $j = 0 ; $j < $resultList[$i]->count ; $j++ ){
@@ -103,16 +103,12 @@ if ($odbc_id){
 		//$row = mysql_fetch_row($result);
 		$row = odbc_fetch_array($result);
 		if ( $row['id'] == null ){
-			//echo "empty<br>\n";
 			$sql_query = "INSERT INTO domain_id (id,domain_name) VALUES( NULL , '".$question."');";
 
-			//mysql_query($sql_query);
 			odbc_exec($odbc_id,$sql_query);
 
 			$sql_query = "SELECT id FROM domain_id WHERE domain_name = '".$question."';";     
-			//mysql_query($sql_query);
 			$result = odbc_exec($odbc_id,$sql_query);
-			//$newId = mysql_result(mysql_query($sql_query),0);
 			$newId = odbc_result($result,1);
 
 			for ( $i = 0 ; $i < count($resolverList) ; $i++ ){
@@ -126,7 +122,6 @@ if ($odbc_id){
 					}
 				}
 			}
-
 		}else{
 			//echo "insert resolveAns into domain_".$row['id']."<br>";
 			$id = $row['id'];
@@ -141,6 +136,7 @@ if ($odbc_id){
 							"' and resolver = '".$resolverList[$i]."';";
 						$result = odbc_exec($odbc_id,$sql_query);
 						$row = odbc_fetch_row($result);
+
 						// add new ip when resolve ip change
 						if ( $row == false ){	
 							$sql_query = "INSERT INTO domain_DB (domain_id,ip,resolver) VALUES('"
@@ -158,8 +154,7 @@ if ($odbc_id){
 				}
 			}
 			// do query
-			//$sql_query = "select ip , count(ip) from domain_$id group by ip;";
-			$sql_query = "select ip , counter from domain_DB where domain_id = $id group by ip;";
+			$sql_query = "select ip , counter from domain_DB where domain_id = $id and resolver <> 'Tester' group by ip;";
 			$result = odbc_exec($odbc_id,$sql_query);
 			if ( $result ){
 				while ( $row=odbc_fetch_array($result) ){
