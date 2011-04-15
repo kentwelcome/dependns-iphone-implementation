@@ -146,7 +146,14 @@ if ($odbc_id){
 					$ip = $row['ip'];	
 					$bClass = getBClass($ip);
 					$Key = array_keys($row);
-					$num = $row[$Key[1]];
+
+					// for MS SQL Server
+					if (is_numeric($Key[1]) == true){
+						$num = $Key[1];
+					} else {
+					// for MySQL 
+						$num = $row[$Key[1]];
+					}
 					$flag = false;
 					for ( $i = 0 ; $i < count($HistoryList) ; $i++ ){
 						if ( $bClass == $HistoryList[$i]->getBClass() )	{
