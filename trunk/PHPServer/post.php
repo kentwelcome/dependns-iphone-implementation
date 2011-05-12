@@ -78,6 +78,13 @@ if ( $Config['DataBase'] ) {
 	$DB_ID	 = "dependns";
 	$DB_PWD	 = "dependns@833";
 }
+
+/*
+   The flow of the follow code is going to send DNS Query to 6 resolvers.
+   The result will be store into the database and calculate the counts of each results.
+   In the end, history data will go through the match algorithm.
+   The grade will be calculated by the algorithm.
+*/
 $odbc_id = odbc_connect("dependns",$DB_ID,$DB_PWD);
 if ($odbc_id){
 	// check password
@@ -95,12 +102,10 @@ if ($odbc_id){
 
 	// check table domain_id 
 	$sql_query = "SELECT id FROM domain_id WHERE domain_name = '".$question."';";
-	//$result = mysql_query($sql_query);
 	$result = odbc_exec($odbc_id,$sql_query);
 	if ( !$result ){
 		echo "can not select from table domain_id<br>\n";
 	}else {
-		//$row = mysql_fetch_row($result);
 		$row = odbc_fetch_array($result);
 		if ( $row['id'] == null ){
 			$sql_query = "INSERT INTO domain_id (id,domain_name) VALUES( NULL , '".$question."');";
