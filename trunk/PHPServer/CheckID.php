@@ -31,18 +31,18 @@ $DB_PWD  = $Config['DataBase']['SQL_PWD'];
 
 // Connect to DepenDNS Server to authenticate User
 $odbc_id = odbc_connect("dependns",$DB_ID,$DB_PWD);
-if (!$odbc_connect){
+if (!$odbc_id){
 	//print "Server Down\n";
 	exit();
 }
 
-$SQL = "SELECT UserInfo.uid WHERE UserInfo.username = '$USER' AND UserInfo.passwd = '$PASS'";
+$SQL = "SELECT UserInfo.uid FROM UserInfo WHERE UserInfo.username = '$USER' AND UserInfo.passwd = '$PASS';";
 $result = odbc_exec($odbc_id,$SQL);
 
 if ($result){
 	$row = odbc_fetch_array($result);
 
-	$if ( isset( $row['uid'] ) ){
+	if ( isset($row['uid']) ){
 		$UID = $row['uid'];
 		print ("$PASS");
 	} else {
