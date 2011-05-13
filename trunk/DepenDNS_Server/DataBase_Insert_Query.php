@@ -30,23 +30,27 @@
 		</tr>
 	</table>
 <?php
-print "<script>
-this.SelectForm.DomainName.value='".$_POST[DomainName]."';
-this.SelectForm.IP.value='".$_POST[IP]."';
-this.SelectForm.Counter.value='".$_POST[Counter]."';
+if ( isset($_POST['DomainName']) && isset($_POST['IP']) && isset($_POST['Counter'])) {
+	print "<script>
+	this.SelectForm.DomainName.value='".$_POST['DomainName']."';
+	this.SelectForm.IP.value='".$_POST['IP']."';
+	this.SelectForm.Counter.value='".$_POST['Counter']."';
 	</script>";
+}
 ?>
 </form>
 
 <?php
 
-if ($_POST[Insert_or_Search] == 1){
-	print "<h1>Search</h1>";
-} else if ($_POST[Insert_or_Search] == 2){
-	if ( strcmp($_POST['IP'],"") == 0 ){
-		print "<p>Resolver IP is empty.</p>";
-		exit();
-	}
+if (isset($_POST['Insert_or_Search'])){
+	if ($_POST['Insert_or_Search'] == 1){
+		print "<h1>Search</h1>";
+	} else if ($_POST['Insert_or_Search'] == 2){
+		if ( strcmp($_POST['IP'],"") == 0 ){
+			print "<p>Resolver IP is empty.</p>";
+			exit();
+		}
+	} 
 } else {
 	exit();
 }
@@ -57,8 +61,8 @@ $DB_host = "localhost";
 $DB_ID   = "dependns";
 $DB_PWD  = "dependns@833";
 
-if ( $_POST[DomainName] != "" ){
-	$question = $_POST[DomainName];
+if ( $_POST['DomainName'] != "" ){
+	$question = $_POST['DomainName'];
 } else {
 	$question = "www.google.com";
 }
@@ -68,9 +72,9 @@ $odbc_id = odbc_connect("dependns",$DB_ID,$DB_PWD);
 
 if ($odbc_id) {
 	// INSERT
-	if ($_POST[Insert_or_Search] == 2){
-		$InsertIP = $_POST[IP];
-		$Counter = $_POST[Counter];
+	if ($_POST['Insert_or_Search'] == 2){
+		$InsertIP = $_POST['IP'];
+		$Counter = $_POST['Counter'];
 
 		$sql_query = "SELECT id FROM domain_id WHERE domain_name = '".$question."';";
 		$result = odbc_exec($odbc_id,$sql_query);
@@ -111,7 +115,7 @@ if ($odbc_id) {
 			print "<p>Error in select index from domain_DB</p>";
 		}
 
-	} else if ($_POST[Insert_or_Search] == 1){
+	} else if ($_POST['Insert_or_Search'] == 1){
 		// Search 
 		print "<p>Query $question...</p>";
 		$sql_query = "SELECT id FROM domain_id WHERE domain_name = '".$question."';";
