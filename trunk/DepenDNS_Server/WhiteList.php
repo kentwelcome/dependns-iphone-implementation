@@ -52,14 +52,14 @@ class WhiteList
 			return false;
 		}
 
-		echo "Launch White List $this->ID <br>";
 
 		// Search the White List data from Database
 		$SQL = "SELECT ip FROM domain_DB WHERE domain_id = '$this->ID' group by ip;";
 		$result = odbc_exec($odbc_id,$SQL);
 		if ($result){
-			$row = odbc_fetch_array($result);
-			$this->WhiteIPList = $row['ip'];
+			for ($i = 0 ; $row = odbc_fetch_array($result) ; $i++){
+				$this->WhiteIPList[$i] = $row['ip'];
+			}
 		} else {
 			odbc_close($odbc_id);
 			return false;
@@ -73,8 +73,15 @@ class WhiteList
 		for ($i = 0 ; $i < count($this->WhiteIPList) ; $i++ ){
 		 	// White list ip not in Answer ip List then display
 			if ($this->ExistInAnswerList($this->WhiteIPList[$i]) == false){
-				echo $this->WhiteIPList."<br>\n";	
+				echo $this->WhiteIPList[$i]."<br>\n";	
 			}	
+		}
+	}
+
+	function DisplayAnswerList()
+	{	
+		for ($i = 0 ; $i < count($this->AnswerIPList) ; $i++){
+			echo $this->AnswerIPList[$i]->ip."<br>";
 		}
 	}
 
