@@ -48,7 +48,7 @@ class DNSLookup {
 		$ipchoice->countGrade();
 
 		// Search White List
-		$WhiteList = new WhiteList($this->DomainName,$match->getIPListAll());
+		$WhiteList = new WhiteList($this->DomainName,$ipchoice->ipListCanRandom);
 		if ($WhiteList->SyncWithDataBase()){
 			$WhiteList->DisplayWhiteList();
 		}
