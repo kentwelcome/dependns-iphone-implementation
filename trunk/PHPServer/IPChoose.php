@@ -29,6 +29,8 @@ class IPChoice {
 				}else{
 					$G = $B*60.0 + $C*40.0;
 				}
+
+				// Display IP List can use
 				if ( $G >= 60 )
 					echo $iplist->ip."<br>\n";
 				//alert(G);
