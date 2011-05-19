@@ -7,6 +7,7 @@ require("Answer.php");
 require("AnswerIP.php");
 require("match.php");
 require("IPChoose.php");
+require("WhiteList.php");
 
 
 if (isset($_REQUEST['question']))
@@ -177,7 +178,7 @@ if ($odbc_id){
 
 // do dependns algorithm
 echo "<br>Usable IP of $question<br>\n";
-$dolookup = new DNSLookup(); 
+$dolookup = new DNSLookup($question); 
 $dolookup->run_algo( $resultList , $HistoryList , $oneTimeCount );
 
 function getBClass( $ip ){

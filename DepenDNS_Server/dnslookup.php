@@ -1,7 +1,7 @@
 <?
 
 class DNSLookup {
-	var $domainName;
+	var $DomainName;
 	var $resultIngo;
 	var $type;
 	var $resolverCount;
@@ -11,8 +11,9 @@ class DNSLookup {
 	var $historyThread;
 	var $answerList = array();
 	var $response;
-	function DNSLookup(){
+	function DNSLookup($url){
 		$this->response = new Response();
+		$this->DomainName = $url;
 	}
 
 	function run_algo( $ResolveAns , $HistoryList , $oneTimeCount ){
@@ -36,15 +37,21 @@ class DNSLookup {
 		}
 		$this->orderResponse();
 		$mode_OneTimeCount = $this->checkOneTimeCount( $oneTimeCount );
-		for ( $i = 0 ; $i < count($this->answerList) ; $i++ ){
+		//for ( $i = 0 ; $i < count($this->answerList) ; $i++ ){
 		//	for ( $j = 0 ; $j < count($this->answerList[$i]->ipList) ; $j++ )
 			//echo "BClass: ".$this->answerList[$i]->getBClass()." times:".$this->answerList[$i]->classCount."<br>";
-		}
+		//}
 		$match = new Match( $this->answerList , $HistoryList , $mode_OneTimeCount );
 		$match->runMatchAlgorithm($this->resolverCount);
 
 		$ipchoice = new IPChoice( $match->getIPListAll() , $match->getRegion() );
 		$ipchoice->countGrade();
+
+		// Search White List
+		$WhiteList = new WhiteList($this->DomainName,$match->getIPListAll());
+		if ($WhiteList->SyncWithDataBase()){
+			$WhiteList->DisplayWhiteList();
+		}
 
 		echo "Grade: ".$ipchoice->Grade."<br>\n";
 
@@ -117,6 +124,11 @@ class DNSLookup {
 		}
 		$ConTmp = $countList[$modeIndex];
 		return $ConTmp[0];
+	}
+
+	function SetDomainName( $url )
+	{
+		$this->DomainName = $url;
 	}
 }
 
