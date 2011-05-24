@@ -36,7 +36,7 @@ class WhiteList
 		}
 
 		// Check the domain name white list whether exist.
-		$SQL = "SELECT domain_id FROM WhiteList WHERE domain_name = '$this->DomainName';";
+		$SQL = "SELECT WhiteList.domain_id FROM WhiteList , domain_id WHERE domain_id.id = WhiteList.domain_id AND domain_id.domain_name = '$this->DomainName';";
 		$result = odbc_exec($odbc_id,$SQL);
 		if ($result){
 			// Domain Name With White List
