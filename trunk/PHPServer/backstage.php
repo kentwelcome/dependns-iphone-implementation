@@ -23,6 +23,16 @@ function post_to_url(path, params, method) {
 	document.body.appendChild(form);    // Not entirely sure if this is necessary
 	form.submit();
 }
+
+function FormCheck(theForm){
+	if (theForm.AddNew.value == ""){
+		theForm.AddNew.focus();
+		return(false);
+	}
+	return(true);
+}
+
+
 </script>
 </head>
 <body>
@@ -54,7 +64,7 @@ if (!$odbc_id){
 
 if (isset($_POST['Delete'])){
 	$DeleteID = $_POST['Delete'];
-	print "<p>Delete $DeleteID</p>";
+	//print "<p>Delete $DeleteID</p>";
 	$SQL = "DELETE FROM WhiteList WHERE domain_id = '$DeleteID'";
 	odbc_exec($odbc_id,$SQL);
 }
@@ -66,6 +76,7 @@ if (isset($_POST['AddNew'])){
 	$row = odbc_fetch_array($result);
 	if ( $row['id'] == NULL ){
 		print "<p>No such domain ($AddNew) in the database</p>";
+		goto DisplayList;
 	} else {
 		$ID = $row['id'];
 	}
@@ -81,6 +92,7 @@ if (isset($_POST['AddNew'])){
 
 }
 
+DisplayList:
 $SQL = "SELECT domain_id.domain_name , domain_id.id FROM domain_id, WhiteList WHERE domain_id.id = WhiteList.domain_id";
 $result = odbc_exec($odbc_id,$SQL);
 
@@ -97,12 +109,12 @@ print "</table>";
 </div>
 <div id="AddDomain">
 <h3>Add Domain To White List</h3>
-<form method="POST">
+<form method="POST" id="AddWhiteList" onSubmit="if(FormCheck(this)){return true;}else{return false;}">
 <?php
 if (isset($AddNew)){
-	print "Insert:<input type='text' name='AddNew' value='$AddNew'/>";
+	print "Insert:<input type='text' id='AddNew' name='AddNew' value='$AddNew'/>";
 } else {
-	print "Insert:<input type='text' name='AddNew' />";
+	print "Insert:<input type='text' id='AddNew' name='AddNew' />";
 }
 ?>
 <input type="submit" />
