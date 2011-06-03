@@ -76,7 +76,7 @@ if (isset($_POST['AddNew'])){
 	$row = odbc_fetch_array($result);
 	if ( $row['id'] == NULL ){
 		print "<p>No such domain ($AddNew) in the database</p>";
-		goto DisplayList;
+		//goto DisplayList;
 	} else {
 		$ID = $row['id'];
 	}
@@ -92,7 +92,7 @@ if (isset($_POST['AddNew'])){
 
 }
 
-DisplayList:
+//DisplayList:
 $SQL = "SELECT domain_id.domain_name , domain_id.id FROM domain_id, WhiteList WHERE domain_id.id = WhiteList.domain_id";
 $result = odbc_exec($odbc_id,$SQL);
 
