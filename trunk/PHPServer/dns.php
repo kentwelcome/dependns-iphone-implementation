@@ -1,4 +1,4 @@
-<?php // PHP DNS API CLI Example
+<? // PHP DNS API CLI Example
 /* -------------------------------------------------------------
 This file is the PurplePixie PHP DNS Query Classes
 

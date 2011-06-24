@@ -29,7 +29,7 @@
 			<td colspan=2 align=center><input type="reset" value="clean"></td>
 		</tr>
 	</table>
-<?php
+<?
 if ( isset($_POST['DomainName']) && isset($_POST['IP']) && isset($_POST['Counter'])) {
 	print "<script>
 	this.SelectForm.DomainName.value='".$_POST['DomainName']."';
@@ -40,7 +40,7 @@ if ( isset($_POST['DomainName']) && isset($_POST['IP']) && isset($_POST['Counter
 ?>
 </form>
 
-<?php
+<?
 
 if (isset($_POST['Insert_or_Search'])){
 	if ($_POST['Insert_or_Search'] == 1){

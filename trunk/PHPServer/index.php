@@ -48,7 +48,7 @@ if ( isPhone.match(/iPhone/i) != null ){
 				</tr>
 				<tr>
 					<td colspan=2>
-<?php
+<?
 require_once('recaptchalib.php');
 $publickey = "6LdXtboSAAAAAIKFNyjWlp0NIcw-lkO3Tr_32AfA"; 
 echo recaptcha_get_html($publickey);
@@ -63,7 +63,7 @@ echo recaptcha_get_html($publickey);
 
 
 		<table width="100%" border="0" cellpadding="3" cellspacing="1" bgcolor="#FFFFFF" style="margin-left:auto; margin-right:auto;" >
-<?php
+<?
 require_once('recaptchalib.php');
 $privatekey = "6LdXtboSAAAAAAo8kzeM0Ax99HX0jbCRDVRcXio9";
 $resp = recaptcha_check_answer ($privatekey,

@@ -38,7 +38,7 @@ function FormCheck(theForm){
 <body>
 <center><h1>White List</h1></center>
 <div id="WriteList">
-<?php
+<?
 // read configure file from dependns.ini
 $Config = parse_ini_file("dependns.ini",true);
 
@@ -110,7 +110,7 @@ print "</table>";
 <div id="AddDomain">
 <h3>Add Domain To White List</h3>
 <form method="POST" id="AddWhiteList" onSubmit="if(FormCheck(this)){return true;}else{return false;}">
-<?php
+<?
 if (isset($AddNew)){
 	print "Insert:<input type='text' id='AddNew' name='AddNew' value='$AddNew'/>";
 } else {
