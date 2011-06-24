@@ -1,4 +1,4 @@
-<?php
+<?
 
 require("dns.inc.php");
 require("dnslookup.php");

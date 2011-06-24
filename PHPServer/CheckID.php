@@ -1,4 +1,4 @@
-<?php
+<?
 //
 //  CheckID.php
 //  DepenDNS
